@@ -1,0 +1,17 @@
+#!/bin/bash
+cd /home/ubuntu/
+
+# install dotnet core
+# https://www.microsoft.com/net/core#linuxubuntu
+if [ ! -f /usr/bin/dotnet ]; then
+    apt-get install libunwind8
+
+    wget https://download.microsoft.com/download/C/5/5/C55807F5-601C-49B1-B9BB-1BE03EB83E0A/dotnet-dev-ubuntu.16.04-x64.1.1.5.tar.gz -P /opt/dotnet/ \
+    && md5sum -c <<< "f6a5669138394d40c5c894308e66be99 /opt/dotnet/dotnet-dev-ubuntu.16.04-x64.1.1.5.tar.gz" \
+    && tar -xvzf /opt/dotnet/dotnet-dev-ubuntu.16.04-x64.1.1.5.tar.gz -C /opt/dotnet/ \
+    && ln -sf /opt/dotnet/dotnet /usr/bin/dotnet \
+    && rm /opt/dotnet/dotnet-dev-ubuntu.16.04-x64.1.1.5.tar.gz
+fi
+
+# first time running dotnet tool requires setting up package cache
+dotnet nuget
