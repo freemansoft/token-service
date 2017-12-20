@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  tokenservice:
+    image: tokenservice
+    build:
+      context: .
+      dockerfile: TokenService/Dockerfile

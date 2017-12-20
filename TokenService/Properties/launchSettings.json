@@ -15,8 +15,9 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "AspNetCoreSampleWebApp": {
-      "commandName": "Project"
+    "Token Service": {
+      "commandName": "Project",
+      "launchBrowser": true
     }
   }
 }
