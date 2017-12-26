@@ -1,0 +1,49 @@
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using TokenService.Models.Rest;
+using Xunit;
+using Xunit.Abstractions;
+
+namespace TokenService.ModelsTest.Rest
+{
+    public class TokenCreateResponseTest
+    {
+        private readonly ITestOutputHelper output;
+
+        public TokenCreateResponseTest(ITestOutputHelper output)
+        {
+            this.output = output;
+
+        }
+
+        [Fact]
+        public void SerializeContextEmpty()
+        {
+            DeserializeSerializeCompare(TokenCreateJson.CreateTokenResponseMessageEmpty);
+        }
+
+        [Fact]
+        public void SerializeContextArray()
+        {
+            DeserializeSerializeCompare(TokenCreateJson.CreateTokenResponseMessageSingle);
+        }
+
+        private void DeserializeSerializeCompare(string jsonRep)
+        {
+            // convert the JSON to objects.  Convert the objects to JSON.
+            TokenCreateResponse hydrated = JsonConvert.DeserializeObject<TokenCreateResponse>(jsonRep);
+            Assert.NotNull(hydrated);
+            output.WriteLine("Original=" + jsonRep);
+            string serialized = JsonConvert.SerializeObject(hydrated, Formatting.Indented);
+            output.WriteLine("Serialized=" + serialized);
+            // compare original JSON with results of deserialize / serialize            
+            var nodeSet1 = JsonConvert.DeserializeObject<JObject>(jsonRep);
+            var nodeSet2 = JsonConvert.DeserializeObject<JObject>(serialized);
+            Assert.True(JToken.DeepEquals(nodeSet1, nodeSet2),
+                "Original JSON and results of deserialize,serialize are different token graphs");
+        }
+    }
+}
