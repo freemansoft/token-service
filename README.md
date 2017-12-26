@@ -3,6 +3,16 @@
 # Token Service #
 This application will eventually be a single use token service.
 
+### Endpoints ###
+
+#### Swagger Docs ####
+GET <this url>/swagger/
+GET <this url>/swagger/v1/swagger.json
+
+#### Token Endpoints ###
+
+POST <this url>/api/v1/Token/Generate
+POST <this url>/api/v1/Token/Validate
 
 ### Running this Application ###
 

@@ -25,11 +25,11 @@ namespace TokenService.Controllers
                 {
                     new TokenMessage
                     {
-                        message = "You can find Swagger documentation at ..."
+                        message = "You can find Swagger documentation on this service at endpoint /swagger"
                     },
                     new TokenMessage
                     {
-                        message = "This application example can be found on GitHub https://github.com/freemansoft/token-service"
+                        message = "Application code can be found on GitHub https://github.com/freemansoft/token-service"
                     }
 
                 }

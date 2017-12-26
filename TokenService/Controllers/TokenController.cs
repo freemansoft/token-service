@@ -9,7 +9,7 @@ using TokenService.Models.Rest;
 namespace TokenService.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Token")]
+    [Route("api/v1/Token")]
     public class TokenController : Controller
     {
 
