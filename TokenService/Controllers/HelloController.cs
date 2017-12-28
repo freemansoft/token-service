@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TokenService.Models.Rest;
 
@@ -10,6 +11,18 @@ namespace TokenService.Controllers
     [Route("/")]
     public class HelloController : Controller
     {
+
+        private readonly ILogger<HelloController> _logger;
+
+        /// <summary>
+        /// Constructor for Dependency Injection
+        /// </summary>
+        /// <param name="logger"></param>
+        public HelloController(ILogger<HelloController> logger)
+        {
+            _logger = logger;
+        }
+        
         /// <summary>
         /// This should return a link to the swagger docs or a list of hyper media URI
         /// </summary>
@@ -18,6 +31,7 @@ namespace TokenService.Controllers
         [ProducesResponseType(typeof(TokenResponse), 200)]
         public IActionResult Get()
         {
+            _logger.LogDebug("Returning the hello message :)");
             return Ok(new TokenResponse
             {
                 Version = "1.0",

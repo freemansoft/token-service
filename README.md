@@ -4,15 +4,17 @@
 This application will eventually be a single use token service.
 
 ### Endpoints ###
+The Token Service implements a set of REST endpoints to create and validate tokens.
 
-#### Swagger Docs ####
-GET <this url>/swagger/
-GET <this url>/swagger/v1/swagger.json
+##### Endpoint Documentation provided with Swagger ####
+Use the following endpoints to see API documentation.
+* GET <this url>/swagger/
+* GET <this url>/swagger/v1/swagger.json
 
-#### Token Endpoints ###
-
-POST <this url>/api/v1/Token/Generate
-POST <this url>/api/v1/Token/Validate
+##### Token Endpoints ###
+This service implements the following endpoints. See the swagger documentation for request and response specifications
+* POST <this url>/api/v1/Token/Generate
+* POST <this url>/api/v1/Token/Validate
 
 ### Running this Application ###
 
@@ -33,6 +35,7 @@ output appears inside the _Output_ pane inside Visual Studio.
 ##### As a _Project_ via VS2017 #####
 The Token Service is marked as the _default project_.
 This means you can run it via F5 or Ctrl-F5.
+You can tell when you are running in this mode because the console output appears in a standalone window.
 1) Make sure _Token Service_ is the active project in the toolbar dropdown.
 2) Select _Token Service_ in the run drop down that contains the green _Play_ icon.
 3) Press the play icon, F5, Ctrl-F5 or use the _Debug_ menu in the menu bar
