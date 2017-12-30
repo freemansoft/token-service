@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TokenService.ModelsTest.Entity
+﻿namespace TokenService.ModelTest.Entity
 {
     class TokenEntityJson
     {

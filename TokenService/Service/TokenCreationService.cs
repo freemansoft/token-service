@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using TokenService.Model.Entity;
+using TokenService.Repository;
 
-namespace TokenService.Services
+namespace TokenService.Service
 {
     /// <summary>
     /// Token creation and managment service implementation
@@ -14,14 +12,17 @@ namespace TokenService.Services
 
         private readonly ILogger<TokenCreationService> _logger;
 
+        private readonly IRepository<TokenEntity> _repository;
+
         /// <summary>
         /// Constructor for Dependency injection
         /// </summary>
         /// <param name="logger"></param>
-        public TokenCreationService(ILogger<TokenCreationService> logger)
+        /// <param name="repository"></param>
+        public TokenCreationService(ILogger<TokenCreationService> logger, IRepository<TokenEntity> repository)
         {
             _logger = logger;
-
+            _repository = repository;
         }
     }
 }

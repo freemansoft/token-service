@@ -1,16 +1,25 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace TokenService.Models.Rest
+namespace TokenService.Model.Rest
 {
     /// <summary>
     /// The root class for token creation requests.
     /// </summary>
     public class TokenCreateRequest : IDataVersion
     {
+        /// <summary>
+        /// This constructor is required so that the JSON serializer knows which concreate class to use for a proprty declared as an interface
+        /// <a href="https://stackoverflow.com/questions/5780888/casting-interfaces-for-deserialization-in-json-net">from stackoverflow</a>
+        /// Another option is to use a converter
+        /// </summary>
+        /// <param name="onBehalfOf"></param>
+        [JsonConstructor]
+        public TokenCreateRequest(TokenIdentity onBehalfOf)
+        {
+            this.onBehalfOf = onBehalfOf;
+        }
+
         /// <summary>
         /// only a version of "1.0" is currently supported
         /// </summary>
@@ -23,7 +32,7 @@ namespace TokenService.Models.Rest
         /// <summary>
         /// The token inititiation request is on behalf of the expected token user
         /// </summary>
-        public TokenIdentity onBehalfOf;
+        public IIdentity onBehalfOf;
         /// <summary>
         /// The maximum number of times this token can be used. The default is 1.
         /// </summary>

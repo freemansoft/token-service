@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using TokenService.Models.Rest;
+using TokenService.Model.Rest;
 
 namespace TokenService.Controllers
 {
@@ -35,15 +34,15 @@ namespace TokenService.Controllers
             return Ok(new TokenResponse
             {
                 Version = "1.0",
-                messages = new TokenMessage[]
+                Messages = new TokenMessage[]
                 {
                     new TokenMessage
                     {
-                        message = "You can find Swagger documentation on this service at endpoint /swagger"
+                        Message = "You can find Swagger documentation on this service at endpoint /swagger"
                     },
                     new TokenMessage
                     {
-                        message = "Application code can be found on GitHub https://github.com/freemansoft/token-service"
+                        Message = "Application code can be found on GitHub https://github.com/freemansoft/token-service"
                     }
 
                 }

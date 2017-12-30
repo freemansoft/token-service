@@ -1,14 +1,11 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace TokenService.Models.Rest
+namespace TokenService.Model.Rest
 {
     /// <summary>
     /// Used to identify a user, often the initiator, the obo user or the validator
     /// </summary>
-    public class TokenIdentity : IIdentityInfo
+    public class TokenIdentity : IIdentity
     {
         /// <summary>
         /// Identity provider

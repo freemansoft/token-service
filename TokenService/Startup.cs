@@ -6,7 +6,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
-using TokenService.Services;
+using TokenService.Model.Entity;
+using TokenService.Repository;
+using TokenService.Service;
 
 namespace TokenService
 {
@@ -16,7 +18,7 @@ namespace TokenService
     public class Startup
     {
         /// <summary>
-        /// Standard boilerplate
+        /// Standard boilerplate that loads the application settings / configuration
         /// </summary>
         /// <param name="env"></param>
         public Startup(IHostingEnvironment env)
@@ -48,6 +50,9 @@ namespace TokenService
             // services
             services.AddTransient<ITokenCreationService, TokenCreationService>();
             services.AddTransient<ITokenValidationService, TokenValidationService>();
+
+            services.AddTransient<IRepository<TokenEntity>,TokenRepository>();
+            services.AddTransient<IRepository<AuthorizationEntity>, AuthorizationRepository>();
             // controllers
 
             // Add framework services.

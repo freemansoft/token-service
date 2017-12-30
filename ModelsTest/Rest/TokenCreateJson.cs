@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TokenService.ModelsTest.Rest
+﻿namespace TokenService.ModelTest.Rest
 {
     class TokenCreateJson
     {
@@ -54,6 +50,7 @@ namespace TokenService.ModelsTest.Rest
             ""jwt"" : ""=asdfasdf"",
             ""messages"" : [
                 {
+                    ""id"" : ""MSG001"",
                     ""message"" : ""some message""
                 }
             ]

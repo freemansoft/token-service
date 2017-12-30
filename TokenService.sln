@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{CA55CB7D-D06A-480D-BE42-764F878D39BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Models\Model.csproj", "{CA55CB7D-D06A-480D-BE42-764F878D39BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelsTest", "ModelsTest\ModelsTest.csproj", "{7E6A50C5-96E6-49E6-8CF7-ACBBDFDF3ADA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelTest", "ModelsTest\ModelTest.csproj", "{7E6A50C5-96E6-49E6-8CF7-ACBBDFDF3ADA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CA55CB7D-D06A-480D-BE42-764F878D39BA} = {CA55CB7D-D06A-480D-BE42-764F878D39BA}
 	EndProjectSection

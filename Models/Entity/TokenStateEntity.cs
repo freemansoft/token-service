@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace TokenService.Models.Entity
+namespace TokenService.Model.Entity
 {
     /// <summary>
     /// Represents the current state of the token
     /// </summary>
-    class TokenStateEntity
+    public class TokenStateEntity
     {
         /// <summary>
         /// Maximum number of times this token can be used

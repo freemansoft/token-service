@@ -5,9 +5,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <RootNamespace>TokenService.ModelsTest</RootNamespace>
+    <RootNamespace>TokenService.ModelTest</RootNamespace>
 
-    <AssemblyName>TokenService.ModelsTest</AssemblyName>
+    <AssemblyName>TokenService.ModelTest</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Models\Model.csproj" />
   </ItemGroup>
 
 </Project>

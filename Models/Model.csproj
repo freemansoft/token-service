@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <DebugType>Full</DebugType>
-    <RootNamespace>TokenService.Models</RootNamespace>
-    <AssemblyName>TokenService.Models</AssemblyName>
+    <RootNamespace>TokenService.Model</RootNamespace>
+    <AssemblyName>TokenService.Model</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

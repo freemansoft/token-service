@@ -1,15 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Linq;
-using TokenService.Models.Rest;
+using TokenService.Model.Rest;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace TokenService.ModelsTest.Rest
+namespace TokenService.ModelTest.Rest
 {
     public class TokenValidateRequestTest
     {

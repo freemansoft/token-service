@@ -1,14 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using TokenService.Models.Entity;
+using TokenService.Model.Entity;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace TokenService.ModelsTest.Entity
+namespace TokenService.ModelTest.Entity
 {
     public class TokenEntityTest
     {

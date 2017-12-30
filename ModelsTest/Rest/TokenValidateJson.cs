@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TokenService.ModelsTest.Rest
+﻿namespace TokenService.ModelTest.Rest
 {
     class TokenValidateJson
     {
@@ -22,9 +18,11 @@ namespace TokenService.ModelsTest.Rest
             ""version"" : ""1.0"",
             ""messages"" : [
                 {
+                    ""id"" : ""DOOM001"",
                     ""message"" : ""we're doomed""
                 },
                 {
+                    ""id"" : ""NOMOR001"",
                     ""message"" : ""it can't take any more of this""
                 }
             ],

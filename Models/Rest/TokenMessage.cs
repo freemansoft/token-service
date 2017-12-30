@@ -1,11 +1,12 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
-namespace TokenService.Models.Rest
+namespace TokenService.Model.Rest
 {
-    public class TokenMessage
+    public class TokenMessage : IResponseMessage
     {
-        public string message;
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+        [JsonProperty(PropertyName = "message")]
+        public string Message { get; set; }
     }
 }

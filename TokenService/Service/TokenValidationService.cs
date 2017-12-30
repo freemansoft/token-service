@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using TokenService.Model.Entity;
+using TokenService.Repository;
 
-namespace TokenService.Services
+namespace TokenService.Service
 {
     /// <summary>
     /// Token validation service implementation
@@ -14,13 +12,17 @@ namespace TokenService.Services
     {
         private readonly ILogger<TokenValidationService> _logger;
 
+        private readonly IRepository<TokenEntity> _repository;
+
         /// <summary>
         /// Constructor for Dependency injection
         /// </summary>
         /// <param name="logger"></param>
-        public TokenValidationService(ILogger<TokenValidationService> logger)
+        /// <param name="repository"></param>
+        public TokenValidationService(ILogger<TokenValidationService> logger, IRepository<TokenEntity> repository)
         {
             _logger = logger;
+            _repository = repository;
         }
     }
 }

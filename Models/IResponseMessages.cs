@@ -5,12 +5,12 @@ namespace TokenService.Model
     /// <summary>
     /// Added to the top level Request, Response and Entities to tell us the data model version
     /// </summary>
-    public interface IDataVersion
+    public interface IResponseMessages
     {
         /// <summary>
-        /// only a version of "1.0" is currently supported
+        /// Diagnostic messages
         /// </summary>
-        [JsonProperty(PropertyName = "version")]
-        string Version { get; set; }
+        [JsonProperty(PropertyName = "messages", NullValueHandling = NullValueHandling.Ignore)]
+        IResponseMessage[] Messages { get; set; }
     }
 }

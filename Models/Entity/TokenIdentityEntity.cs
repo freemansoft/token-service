@@ -1,11 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace TokenService.Models.Entity
+namespace TokenService.Model.Entity
 {
-    class TokenIdentityEntity : IIdentityInfo
+    public class TokenIdentityEntity : IIdentity
     {
         /// <summary>
         /// Identity provider
