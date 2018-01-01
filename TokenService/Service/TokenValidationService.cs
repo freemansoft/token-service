@@ -48,17 +48,15 @@ namespace TokenService.Service
         private void ValidateRequest(TokenValidateRequest request)
         {
             ValidationContext context = new ValidationContext(request, null, null);
-            List<ValidationResult> results = new List<ValidationResult>();
-            bool valid = Validator.TryValidateObject(request, context, results, true);
-            if (!valid)
+            IEnumerable<ValidationResult> results = request.Validate(context);
+            List<TokenMessage> messages = new List<TokenMessage>();
+            foreach (ValidationResult oneResult in results)
             {
-                TokenMessage[] messages = new TokenMessage[results.Count];
-                int messageIndex = 0;
-                foreach (ValidationResult result in results)
-                {
-                    TokenMessage message = new TokenMessage(null, result.ErrorMessage);
-                    messages[messageIndex++] = message;
-                }
+                TokenMessage message = new TokenMessage(null, oneResult.ErrorMessage);
+                messages.Add(message);
+            }
+            if (messages.Count > 0)
+            {
                 throw new CreateBadArgumentException("Failed Object Validation", new TokenResponse(messages));
             }
         }

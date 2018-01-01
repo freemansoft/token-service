@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using TokenService.Model.Rest;
 
 namespace TokenService.Controllers
@@ -21,7 +22,7 @@ namespace TokenService.Controllers
         {
             _logger = logger;
         }
-        
+
         /// <summary>
         /// This should return a link to the swagger docs or a list of hyper media URI
         /// </summary>
@@ -31,21 +32,13 @@ namespace TokenService.Controllers
         public IActionResult Get()
         {
             _logger.LogDebug("Returning the hello message :)");
-            return Ok(new TokenResponse
+            List<TokenMessage> messages = new List<TokenMessage>(new TokenMessage[] {
+                new TokenMessage(null, "You can find Swagger documentation on this service at endpoint /swagger"),
+                new TokenMessage(null, "Application code can be found on GitHub https://github.com/freemansoft/token-service")
+            });
+            return Ok(new TokenResponse(messages)
             {
                 Version = "1.0",
-                Messages = new TokenMessage[]
-                {
-                    new TokenMessage
-                    {
-                        Message = "You can find Swagger documentation on this service at endpoint /swagger"
-                    },
-                    new TokenMessage
-                    {
-                        Message = "Application code can be found on GitHub https://github.com/freemansoft/token-service"
-                    }
-
-                }
             });
         }
 

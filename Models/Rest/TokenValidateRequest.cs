@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace TokenService.Model.Rest
 {
-    public class TokenValidateRequest: IDataVersion
+    public class TokenValidateRequest: IDataVersion, IValidatableObject
     {
         /// <summary>
         /// only a version of "1.0" is currently supported
@@ -29,5 +30,12 @@ namespace TokenService.Model.Rest
 
         public override string ToString() => JsonConvert.SerializeObject(this);
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            List<ValidationResult> results = new List<ValidationResult>();
+            bool valid = Validator.TryValidateObject(this, validationContext, results, true);
+            return results;
+        }
+    
     }
 }

@@ -12,11 +12,11 @@ namespace TokenService.Model
         /// Machine readable identifier for each message
         /// </summary>
         [JsonProperty(PropertyName = "id")]
-        string Id { get; set; }
+        string Id { get; }
         /// <summary>
         /// Human readable message
         /// </summary>
         [JsonProperty(PropertyName = "message")]
-        string Message { get; set; }
+        string Message { get; }
     }
 }

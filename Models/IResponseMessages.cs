@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace TokenService.Model
 {
@@ -11,6 +12,6 @@ namespace TokenService.Model
         /// Diagnostic messages
         /// </summary>
         [JsonProperty(PropertyName = "messages", NullValueHandling = NullValueHandling.Ignore)]
-        IResponseMessage[] Messages { get; set; }
+        IList<IResponseMessage> Messages { get; }
     }
 }

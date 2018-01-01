@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace TokenService.Model.Rest
@@ -8,7 +9,7 @@ namespace TokenService.Model.Rest
     /// <summary>
     /// The root class for token creation requests.
     /// </summary>
-    public class TokenCreateRequest : IDataVersion
+    public class TokenCreateRequest : IDataVersion, IValidatableObject
     {
         /// <summary>
         /// This constructor is required so that the JSON serializer knows which concreate class to use for a proprty declared as an interface
@@ -47,6 +48,7 @@ namespace TokenService.Model.Rest
         /// </summary>
         [JsonProperty(PropertyName = "maxUsageCount")]
         public int MaxUsageCount { get; set; } = 1;
+
         /// <summary>
         /// How long a token is valid.  The default is 300 seconds.
         /// </summary>
@@ -68,5 +70,12 @@ namespace TokenService.Model.Rest
         public JToken Context { get; set; }
 
         public override string ToString() => JsonConvert.SerializeObject(this);
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            List<ValidationResult> results = new List<ValidationResult>();
+            bool valid = Validator.TryValidateObject(this, validationContext, results, true);
+            return results;
+        }
     }
 }

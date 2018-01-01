@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace TokenService.Model.Rest
 {
@@ -14,14 +15,14 @@ namespace TokenService.Model.Rest
         /// </summary>
         /// <param name="messages"></param>
         [JsonConstructor]
-        public TokenCreateResponse(TokenMessage[] messages) : base(messages)
+        public TokenCreateResponse(List<TokenMessage> messages) : base(messages)
         {
         }
 
         /// <summary>
         /// Primarily exists to support throwing exceptions with empty response or for unit testing.
         /// </summary>
-        public TokenCreateResponse() : this(new TokenMessage[0])
+        public TokenCreateResponse() : this(new List<TokenMessage>())
         {
 
         }
