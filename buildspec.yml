@@ -3,13 +3,13 @@ phases:
   pre_build:
     commands:
       - echo Restore started on `date`
-      - dotnet restore AspNetCoreWebService/AspNetCoreWebService.csproj
+      - dotnet restore TokenService/TokenService.csproj
   build:
     commands:
       - echo Build started on `date`
-      - dotnet publish -c release -o ./build_output AspNetCoreWebService/AspNetCoreWebService.csproj
+      - dotnet publish -c release -o ./build_output TokenService/TokenService.csproj
 artifacts:
   files:
-    - AspNetCoreWebService/build_output/**/*
+    - TokenService/build_output/**/*
     - scripts/**/*
     - appspec.yml

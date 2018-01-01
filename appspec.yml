@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: AspNetCoreWebService/build_output
+  - source: TokenService/build_output
     destination: /home/ubuntu/aspnetcoreservice
   - source: scripts/virtualhost.conf
     destination: /home/ubuntu/aspnetcoreservice 
