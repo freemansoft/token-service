@@ -79,18 +79,23 @@ You should be able to see and manipulate the image from the Docker command line
 ### Interesting Links ###
 I found these links useful while trying to understand how to use Docker with .Net Core 2.0 and with Visual Studio 2017
 
-Dot Net Core
-[Dot Net CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/?tabs=netcore2x)
-ASP.Net Core
-[Docker image types documented at](https://www.hanselman.com/blog/NETAndDocker.aspx)
-[Hosting the service in Docker](https://docs.microsoft.com/en-us/aspnet/core/publishing/docker)
-[Visual Studio Tools for Docker](https://docs.microsoft.com/en-us/aspnet/core/publishing/visual-studio-tools-for-docker)
-ASP .Net in Azure
-[Deploy an ASP.NET container in a Docker Host](https://docs.microsoft.com/en-us/azure/vs-azure-tools-docker-hosting-web-apps-in-docker)
-AWS
-[Creating and Deploying Elastic Beanstalk applications in DotNet using Vistual Studio](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_NET.html)
-[AWS SDK for Dot Net](https://aws.amazon.com/sdk-for-net/)
-[Using Visual Studio with AWS CodeStar](http://docs.aws.amazon.com/codestar/latest/userguide/setting-up-ide-vs.html)
+* Dot Net Core
+  * [Dot Net CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/?tabs=netcore2x)
+* ASP.Net Core
+  * [Docker image types documented at](https://www.hanselman.com/blog/NETAndDocker.aspx)
+  * [Hosting the service in Docker](https://docs.microsoft.com/en-us/aspnet/core/publishing/docker)
+  * [Visual Studio Tools for Docker](https://docs.microsoft.com/en-us/aspnet/core/publishing/visual-studio-tools-for-docker)
+* ASP.Net Core Model Validation
+  * [Model validation intro](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation)
+  * [Unit testing when using model validation](https://dotnetliberty.com/index.php/2016/01/04/how-to-unit-test-asp-net-5-mvc-6-modelstate/)
+* JWT
+  * [JWT validation and authorization in asp net core](https://blogs.msdn.microsoft.com/webdev/2017/04/06/jwt-validation-and-authorization-in-asp-net-core/)
+* ASP .Net in Azure
+  * [Deploy an ASP.NET container in a Docker Host](https://docs.microsoft.com/en-us/azure/vs-azure-tools-docker-hosting-web-apps-in-docker)
+* ASP .Net in AWS
+  * [Creating and Deploying Elastic Beanstalk applications in DotNet using Vistual Studio](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_NET.html)
+  * [AWS SDK for Dot Net](https://aws.amazon.com/sdk-for-net/)
+  * [Using Visual Studio with AWS CodeStar](http://docs.aws.amazon.com/codestar/latest/userguide/setting-up-ide-vs.html)
 
 -----------
 

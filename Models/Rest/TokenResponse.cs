@@ -6,7 +6,7 @@ namespace TokenService.Model.Rest
     /// Standard response.
     /// Responses are based on this.  Services will generally extend this class to add custom attributes..
     /// </summary>
-    public class TokenResponse : IDataVersion, IResponseMessages
+    public class TokenResponse : IResponse
     {
         /// <summary>
         /// This constructor is required so that the JSON serializer knows which concreate class to use for a proprty declared as an interface
@@ -39,5 +39,8 @@ namespace TokenService.Model.Rest
         /// </summary>
         [JsonProperty(PropertyName = "messages", NullValueHandling = NullValueHandling.Ignore)]
         public IResponseMessage[] Messages { get; set; }
+
+        public override string ToString() => JsonConvert.SerializeObject(this);
+
     }
 }

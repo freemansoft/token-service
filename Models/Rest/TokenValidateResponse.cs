@@ -29,5 +29,8 @@ namespace TokenService.Model.Rest
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public JToken context;
+
+        public override string ToString() => JsonConvert.SerializeObject(this);
+
     }
 }

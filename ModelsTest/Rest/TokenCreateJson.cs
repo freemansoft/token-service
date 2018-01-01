@@ -12,6 +12,7 @@
             },
             ""maxUsageCount"" : 10,
             ""expirationIntervalSeconds"": 0,
+            ""effectiveTime"":  ""2000-12-29T20:00:00Z"",
         ";
 
         static string EmptyContext = @"

@@ -18,21 +18,20 @@
                 ""providerName"" : ""freemansoft"",
                 ""userName"" : ""initiator@bar.com""
             },
-            ""validatees"":
+            ""audience"":
             [
                 {
                     ""providerName"" : ""freemansoft"",
                     ""userName"" : ""validateme@bar.com""
                 }
             ],
-            ""tokenState"" : 
-            {
-                ""maxUseCount"": 1,
-                ""currentUseCount"": 0,
-                ""expirationIntervalSec"": 300,
-                ""initiationTime"": ""2020-12-29T00:00:00Z"",
-                ""expirationTime"": ""2000-12-29T20:00:00Z""
-            },
+
+            ""maxUseCount"": 1,
+            ""currentUseCount"": 0,
+            ""expirationIntervalSec"": 300,
+            ""initiationTime"": ""2020-12-29T00:00:00Z"",
+            ""expirationTime"": ""2000-12-29T20:00:00Z"",
+            ""effectiveTime"":  ""2000-12-29T20:00:00Z"",
         ";
 
         static string EmptyContext = @"

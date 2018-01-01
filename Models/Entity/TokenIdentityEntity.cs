@@ -14,5 +14,8 @@ namespace TokenService.Model.Entity
         /// </summary>
         [JsonProperty(PropertyName = "userName")]
         public string UserName { get; set; }
+
+        public override string ToString() => JsonConvert.SerializeObject(this);
+
     }
 }

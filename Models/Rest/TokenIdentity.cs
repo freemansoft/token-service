@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace TokenService.Model.Rest
 {
@@ -15,7 +16,11 @@ namespace TokenService.Model.Rest
         /// <summary>
         /// User name set for this Identity definition
         /// </summary>
+        [Required]
         [JsonProperty(PropertyName = "userName")]
         public string UserName { get; set; }
+
+        public override string ToString() => JsonConvert.SerializeObject(this);
+
     }
 }
