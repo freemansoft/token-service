@@ -40,7 +40,7 @@ namespace TokenService.Service
             return null;
         }
 
-//#pragma warning disable IDE0017
+        //#pragma warning disable IDE0017
         /// <summary>
         /// throws CreateBadArgumentException if there is a problem with the token.
         /// </summary>

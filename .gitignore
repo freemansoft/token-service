@@ -3,3 +3,4 @@
 **/obj
 **/*.csproj.user
 **/*.coverage
+**/build_output
