@@ -10,4 +10,4 @@ a2enmod lbmethod_byrequests
 
 # override the existing site configuration
 HTTPD_CONF=/etc/apache2/sites-available/000-default.conf
-cp /home/ubuntu/aspnetcoreservice/virtualhost.conf $HTTPD_CONF
+cp /home/ubuntu/tokenservice/virtualhost.conf $HTTPD_CONF
