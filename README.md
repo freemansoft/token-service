@@ -100,6 +100,9 @@ I found these links useful while trying to understand how to use Docker with .Ne
   * [Creating and Deploying Elastic Beanstalk applications in DotNet using Vistual Studio](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_NET.html)
   * [AWS SDK for Dot Net](https://aws.amazon.com/sdk-for-net/)
   * [Using Visual Studio with AWS CodeStar](http://docs.aws.amazon.com/codestar/latest/userguide/setting-up-ide-vs.html)
+* AWS Code**
+ * [Installing the Code Deploy agent if it is busted somehow](https://docs.aws.amazon.com/codedeploy/latest/userguide/codedeploy-agent-operations-install-ubuntu.html)
+ * 
 
 -----------
 
