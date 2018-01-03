@@ -2,16 +2,16 @@
 cd /home/ubuntu/
 
 # install dotnet core
-# https://www.microsoft.com/net/core#linuxubuntu
+# https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x
 if [ ! -f /usr/bin/dotnet ]; then
     apt-get install libunwind8
 
-    wget https://download.microsoft.com/download/C/5/5/C55807F5-601C-49B1-B9BB-1BE03EB83E0A/dotnet-dev-ubuntu.16.04-x64.1.1.5.tar.gz -P /opt/dotnet/ \
-    && md5sum -c <<< "f6a5669138394d40c5c894308e66be99 /opt/dotnet/dotnet-dev-ubuntu.16.04-x64.1.1.5.tar.gz" \
-    && tar -xvzf /opt/dotnet/dotnet-dev-ubuntu.16.04-x64.1.1.5.tar.gz -C /opt/dotnet/ \
-    && ln -sf /opt/dotnet/dotnet /usr/bin/dotnet \
-    && rm /opt/dotnet/dotnet-dev-ubuntu.16.04-x64.1.1.5.tar.gz
+	curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+	mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+	sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > /etc/apt/sources.list.d/dotnetdev.list'
+	apt-get update
+    apt-get --assume-yes install dotnet-sdk-2.0.2
 fi
 
 # first time running dotnet tool requires setting up package cache
-dotnet nuget
+#dotnet nuget

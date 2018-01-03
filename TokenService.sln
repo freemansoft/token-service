@@ -19,7 +19,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		appspec.yml = appspec.yml
 		buildspec.yml = buildspec.yml
+		scripts\install_dotnetcore = scripts\install_dotnetcore
+		scripts\install_httpd = scripts\install_httpd
 		README.md = README.md
+		scripts\remove_application = scripts\remove_application
+		scripts\start_service = scripts\start_service
+		scripts\stop_service = scripts\stop_service
+		scripts\virtualhost.conf = scripts\virtualhost.conf
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenServiceTest", "..\TokenServiceTest\TokenServiceTest.csproj", "{D58A48AB-0D77-4327-896A-A5CCCA521089}"

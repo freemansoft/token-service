@@ -2,9 +2,9 @@ version: 0.0
 os: linux
 files:
   - source: TokenService/build_output
-    destination: /home/ubuntu/aspnetcoreservice
+    destination: /home/ubuntu/tokenservice
   - source: scripts/virtualhost.conf
-    destination: /home/ubuntu/aspnetcoreservice 
+    destination: /home/ubuntu/tokenservice 
 hooks:
   ApplicationStop:
     - location: scripts/stop_service

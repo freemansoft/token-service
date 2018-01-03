@@ -4,7 +4,7 @@ cd /home/ubuntu/
 # start apache
 systemctl restart apache2.service
 
-SERVICE_ROOT=/home/ubuntu/aspnetcoreservice
+SERVICE_ROOT=/home/ubuntu/tokenservice
 PID_FILE=$SERVICE_ROOT/service.pid
 
 # shut down sevice if it is running already
@@ -15,5 +15,5 @@ fi
 
 # un asp.core application
 cd $SERVICE_ROOT
-dotnet AspNetCoreWebService.dll &>$SERVICE_ROOT/service.log &
+dotnet TokenService.dll &>$SERVICE_ROOT/service.log &
 echo $! > $SERVICE_ROOT/service.pid

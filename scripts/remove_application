@@ -1,2 +1,2 @@
 #!/bin/bash
-rm -rf /home/ubuntu/aspnetcoreservice
+rm -rf /home/ubuntu/tokenservice
