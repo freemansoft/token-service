@@ -8,8 +8,8 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - dotnet build -c release -o ./build_output TokenService/TokenService.csproj
-      - dotnet publish -c release -o ./build_output TokenService/TokenService.csproj
+      - dotnet build -c Release -o ./build_output TokenService/TokenService.csproj
+      - dotnet publish -c Release -o ./build_output TokenService/TokenService.csproj
 artifacts:
   files:
     - TokenService/build_output/**/*
