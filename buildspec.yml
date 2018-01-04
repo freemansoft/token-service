@@ -2,6 +2,7 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo Using tooling dotnet version `dotnet --version`
       - echo Restore started on `date`
       - dotnet restore TokenService/TokenService.csproj
   build:
