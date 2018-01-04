@@ -1,16 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
-    <ItemGroup>
-      <DocFile Include="bin\$(Configuration)\$(TargetFramework)\*.xml" />
-    </ItemGroup>
-    <Copy SourceFiles="@(DocFile)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="false" />
-  </Target>
-  <PropertyGroup>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
-
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>TokenService</RootNamespace>

@@ -83,6 +83,8 @@ I found these links useful while trying to understand how to use Docker with .Ne
   * [Dot Net CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/?tabs=netcore2x)
   * [Dot Net Core linux tarballs](https://www.microsoft.com/net/download/linux)
   * [Dot Net Core binary officieal GitHub downloads](https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.0.0-download.md)
+  * [Change the version of the dotnet sdk to match CodeBuild](https://github.com/faniereynders/dotnet-sdk-helpers)
+  * [Switching SDK versions](https://reynders.co/use-this-helper-cli-for-switching-net-core-sdk-versions/)
 * ASP.Net Core
   * [Docker image types documented at](https://www.hanselman.com/blog/NETAndDocker.aspx)
   * [Hosting the service in Docker](https://docs.microsoft.com/en-us/aspnet/core/publishing/docker)
