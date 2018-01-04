@@ -87,6 +87,8 @@ I found these links useful while trying to understand how to use Docker with .Ne
   * [Docker image types documented at](https://www.hanselman.com/blog/NETAndDocker.aspx)
   * [Hosting the service in Docker](https://docs.microsoft.com/en-us/aspnet/core/publishing/docker)
   * [Visual Studio Tools for Docker](https://docs.microsoft.com/en-us/aspnet/core/publishing/visual-studio-tools-for-docker)
+  * [Dotnet Core 2.0 not including XML docs used by swagger](https://github.com/dotnet/sdk/issues/795)
+  * [Dotnet Core 2.0 not including XML docs used by swagger](https://tattoocoder.com/dont-lose-your-swagger-with-dotnet-build/)
 * ASP.Net Core Model Validation
   * [Model validation intro](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation)
   * [Unit testing when using model validation](https://dotnetliberty.com/index.php/2016/01/04/how-to-unit-test-asp-net-5-mvc-6-modelstate/)
