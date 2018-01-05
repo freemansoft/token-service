@@ -76,6 +76,18 @@ You should be able to see and manipulate the image from the Docker command line
 3) Your user id is added to the docker-users group. Docker will provide instructions if you are not a member of this group.
 4) Docker file sharing for deployment is enabled.  Visual Studio / Docker will provide instructions / make this change if it is not enabled.
 
+### Swagger and XML documentation
+Swagger is configured to expose the generated XML documentation for the REST endpoints. 
+This means the system must copy TokenService.xml into the correct directory as part of the build process
+so that it can then be copied to the server.
+
+AWS AMI EC2 Instances have **case sensitive file systems**. 
+This means that the XML file system location must be cased correctly.
+That file path includes the _Configurat_ value, _Debug_ or _Release_.
+The case of the first character in that is **important** because it is important in the file path
+_buildspec.yml_ **must** set the _-c_ configuration value to **D**ebug or **R**elease where the _first eltter is capitalized_.
+Failure to do this results in deployment failure due to the loss of the xml documentation needed by Swagger
+
 ### Interesting Links ###
 I found these links useful while trying to understand how to use Docker with .Net Core 2.0 and with Visual Studio 2017
 
