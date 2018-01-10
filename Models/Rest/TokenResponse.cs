@@ -16,7 +16,7 @@ namespace TokenService.Model.Rest
         /// </summary>
         /// <param name="messages"></param>
         [JsonConstructor]
-        public TokenResponse(List<TokenMessage> messages)
+        public TokenResponse(List<TokenResponseMessage> messages)
         {
             Messages = new List<IResponseMessage>(messages);
         }
@@ -24,7 +24,7 @@ namespace TokenService.Model.Rest
         /// <summary>
         /// Primarily exists to support throwing exceptions with empty response or for unit testing.
         /// </summary>
-        public TokenResponse() : this( new List<TokenMessage>())
+        public TokenResponse() : this( new List<TokenResponseMessage>())
         {
 
         }
@@ -32,8 +32,8 @@ namespace TokenService.Model.Rest
         /// <summary>
         /// only a version of "1.0" is currently supported
         /// </summary>
-        [JsonProperty(PropertyName = "version")]
-        public string Version { get; set; }
+        [JsonProperty(PropertyName = "version", Required = Required.Always)]
+        public string Version { get; set; } = "1.0";
 
         /// <summary>
         /// Diagnostic messages

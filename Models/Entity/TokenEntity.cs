@@ -7,7 +7,7 @@ namespace TokenService.Model.Entity
     /// <summary>
     /// Root object for token information stored in a persistent store. This token's services root model object
     /// </summary>
-    public class TokenEntity: IDataVersion
+    public class TokenEntity : IDataVersion, IHasId
     {
         /// <summary>
         /// This constructor is required so that the JSON serializer knows which concreate class to use for a proprty declared as an interface
@@ -16,86 +16,125 @@ namespace TokenService.Model.Entity
         /// </summary>
         /// <param name="onBehalfOf"></param>
         /// <param name="initiator"></param>
-        /// <param name="audience"></param>
+        /// <param name="consumedBy"></param>
         [JsonConstructor]
-        public TokenEntity(TokenIdentityEntity onBehalfOf, TokenIdentityEntity initiator, TokenIdentityEntity[] audience)
+        public TokenEntity(TokenIdentityEntity onBehalfOf, TokenIdentityEntity initiator, TokenIdentityEntity[] consumedBy)
         {
-            this.onBehalfOf = onBehalfOf;
-            this.initiator = initiator;
-            this.audience = audience;
+            if (onBehalfOf != null)
+            {
+                this.OnBehalfOf = onBehalfOf;
+            }
+            if (initiator != null)
+            {
+                this.Initiator = initiator;
+            }
+            if (consumedBy != null)
+            {
+                this.ConsumedBy = consumedBy;
+            }
         }
+
+        /// <summary>
+        /// Primary constructor used by services.
+        /// </summary>
+        /// <param name="onBehalfOf"></param>
+        /// <param name="initiator"></param>
+        public TokenEntity(TokenIdentityEntity onBehalfOf, TokenIdentityEntity initiator) : this(onBehalfOf, initiator, null)
+        {
+        }
+
 
         /// <summary>
         /// only a version of "1.0" is currently supported
         /// </summary>
-        [JsonProperty(PropertyName = "version")]
-        public string Version { get; set; }
+        [JsonProperty(PropertyName = "version", Required = Required.Always)]
+        public string Version { get; set; } = "1.0";
         /// <summary>
         /// url protected by this token
         /// The JWT <i>sub</i>
         /// </summary>
-        public string protectedUrl;
+        [JsonProperty(PropertyName = "protectedUrl")]
+        public string ProtectedUrl { get; set; }
         /// <summary>
         /// the JWT given to the user to be presented to the consuming system and passed to the validate call()
         /// </summary>
-        public string jwt;
+        [JsonProperty(PropertyName = "jwt")]
+        public string JwtAsString { get; set; }
         /// <summary>
         /// The unique identifier that was put inside the JWT. This will also act as the primary key for storage
         /// The JWT <i>jti</i>
         /// </summary>
-        public string jwtUniqueIdentifier;
+        [JsonProperty(PropertyName = "jwtUniqueIdentifier", Required = Required.Always)]
+        public string JwtUniqueIdentifier { get; set; }
         /// <summary>
-        /// The secret used to encrypt the token.  Should this really be here?
+        /// The secret used to encrypt the token.  This should be encrypted or not put here.
         /// </summary>
-        public string jwtSecret = "secret";
+        [JsonProperty(PropertyName = "jwtSecret")]
+        public string JwtSecret { get; set; } = "secret";
         /// <summary>
-        /// Intended user of this token
-        /// </summary>
-        public IIdentity onBehalfOf;
-        /// <summary>
-        /// Creator of the token, the caller of CreateToken()
-        /// The JWT <i>iss</i>
-        /// </summary>
-        public IIdentity initiator;
-        /// <summary>
-        /// list of parties that have called validate()
+        /// Intended user of this token.  Can be empty but should never be null.
         /// The JWT <i>aud</i>
         /// </summary>
-        public IIdentity[] audience = new TokenIdentityEntity[0];
+        [JsonProperty(PropertyName = "onBehalfOf")]
+        public IIdentity OnBehalfOf { get; private set; } = new TokenIdentityEntity(null, null);
+        /// <summary>
+        /// Creator of the token, the caller of CreateToken(). Can be empty but should never be null
+        /// The JWT <i>iss</i>
+        /// </summary>
+        [JsonProperty(PropertyName = "initiator")]
+        public IIdentity Initiator { get; private set; } = new TokenIdentityEntity(null, null);
+        /// <summary>
+        /// list of parties that have called validate().  Can be empty but should never be null
+        /// for audit
+        /// </summary>
+        [JsonProperty(PropertyName = "consumedBy", Required = Required.Always)]
+        public IIdentity[] ConsumedBy { get; set; } = Array.Empty<TokenIdentityEntity>();
 
         /// <summary>
         /// Maximum number of times this token can be used
         /// </summary>
-        public int maxUseCount = 1;
+        [JsonProperty(PropertyName = "maxUseCount", Required = Required.Always)]
+        public int MaxUseCount = 1;
         /// <summary>
         /// The number of times this token has been used
         /// </summary>
-        public int currentUseCount = 0;
+        [JsonProperty(PropertyName = "currentUseCount", Required = Required.Always)]
+        public int CurrentUseCount { get; set; } = 0;
         /// <summary>
         /// Length of time this token is valid.  Added to the initiation time
         /// </summary>
-        public int expirationIntervalSec = 300;
+        [JsonProperty(PropertyName = "expirationIntervalSec", Required = Required.Always)]
+        public int ExpirationIntervalSec { get; set; } = 300;
         /// <summary>
         /// The time this token was created. Used to create expiration time
         /// The JWT <i>iat</i>
         /// </summary>
-        public DateTime initiationTime = DateTime.Now;
+        [JsonProperty(PropertyName = "initiationTime", Required = Required.Always)]
+        public DateTime InitiationTime { get; set; } = DateTime.Now;
         /// <summary>
         /// The expiration time for this token. Calculated using initiationTime + expirationIntervalSec
         /// The JWT <i>exp</i>
         /// </summary>
-        public DateTime expirationTime = DateTime.MaxValue;
+        [JsonProperty(PropertyName = "expirationTime", Required = Required.Always)]
+        public DateTime ExpirationTime = DateTime.MaxValue;
         /// <summary>
         /// When the token can first be used
         /// The JWT <i>nbf</i>
         /// </summary>
-        public DateTime effectiveTime = DateTime.Now;
+        [JsonProperty(PropertyName = "effectiveTime", Required = Required.Always)]
+        public DateTime EffectiveTime = DateTime.Now;
 
         /// <summary>
         /// Arbitrary context shared by the token initator and consumes by the audience
         /// </summary>
-        [JsonProperty(NullValueHandling=NullValueHandling.Ignore)]
-        public JToken context;
+        [JsonProperty(PropertyName = "context", NullValueHandling = NullValueHandling.Ignore)]
+        public JToken Context { get; set; }
+
+        /// <summary>
+        /// Used by the repositoryies
+        /// </summary>
+        [JsonIgnore]
+        public string Id => this.JwtUniqueIdentifier;
 
         public override string ToString() => JsonConvert.SerializeObject(this);
 

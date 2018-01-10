@@ -1,14 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace TokenService.Model.Entity
 {
     /// <summary>
-    /// What should be the primary key?, username?, identity composite...?
+    /// What should be the primary key?, UserName?, identity composite (ProviderName/UserName) ...?
     /// </summary>
-    public class AuthorizationEntity: IIdentity, IDataVersion
+    public class AuthorizationEntity : IIdentity, IDataVersion, IHasId
     {
         /// <summary>
         /// only a version of "1.0" is currently supported
@@ -20,13 +18,19 @@ namespace TokenService.Model.Entity
         /// Identity provider. should configure JSON serializaton for providerName
         /// </summary>
         [JsonProperty(PropertyName = "providerName")]
-        public string ProviderName { get; set; }
+        public string ProviderName { get; set; } = "global";
 
         /// <summary>
         /// user name. should configure JSON serializaton for userName
         /// </summary>
         [JsonProperty(PropertyName = "userName")]
         public string UserName { get; set; }
+
+        /// <summary>
+        /// Used by Repositories
+        /// </summary>
+        [JsonIgnore]
+        public string Id => ProviderName + "/" + UserName;
 
 
         /// <summary>

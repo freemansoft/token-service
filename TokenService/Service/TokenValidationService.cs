@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using TokenService.Exception;
 using TokenService.Model.Entity;
 using TokenService.Model.Rest;
 using TokenService.Repository;
@@ -31,6 +30,8 @@ namespace TokenService.Service
         /// <summary>
         /// Validates the passed in token should be honored
         /// Returns the response.  Throws an exception containing a response if it fails
+        /// BadArgumentException if the request is bad
+        /// FailedException if there was some other problem
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -40,25 +41,16 @@ namespace TokenService.Service
             return null;
         }
 
-        //#pragma warning disable IDE0017
+#pragma warning disable CA1822
         /// <summary>
-        /// throws CreateBadArgumentException if there is a problem with the token.
+        /// throws BadArgumentException if there is a problem with the token.
         /// </summary>
         /// <param name="request"></param>
-        private void ValidateRequest(TokenValidateRequest request)
+        internal void ValidateRequest(IValidatableObject request)
         {
             ValidationContext context = new ValidationContext(request, null, null);
             IEnumerable<ValidationResult> results = request.Validate(context);
-            List<TokenMessage> messages = new List<TokenMessage>();
-            foreach (ValidationResult oneResult in results)
-            {
-                TokenMessage message = new TokenMessage(null, oneResult.ErrorMessage);
-                messages.Add(message);
-            }
-            if (messages.Count > 0)
-            {
-                throw new CreateBadArgumentException("Failed Object Validation", new TokenResponse(messages));
-            }
+            this.RaiseValidationErrors(results);
         }
 
     }

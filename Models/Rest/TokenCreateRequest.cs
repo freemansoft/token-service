@@ -27,19 +27,19 @@ namespace TokenService.Model.Rest
         /// only a version of "1.0" is currently supported
         /// </summary>
         [Required]
-        [JsonProperty(PropertyName = "version")]
+        [JsonProperty(PropertyName = "version", Required = Required.Always)]
         public string Version { get; set; }
         /// <summary>
         /// URL that this token is issued for.  The protected resource.
-        /// The <i>aud</i> in the JWT
+        /// The <i>sub</i> in the JWT
         /// </summary>
         [Required]
         [Url]
-        [JsonProperty(PropertyName = "protectedUrl")]
+        [JsonProperty(PropertyName = "protectedUrl", Required = Required.Always)]
         public string ProtectedUrl { get; set; }
         /// <summary>
         /// The token inititiation request is on behalf of the expected token user
-        /// The <i>sub</i> in the JWT
+        /// The <i>aud</i> in the JWT
         /// </summary>
         [JsonProperty(PropertyName = "onBehalfOf")]
         public IIdentity OnBehalfOf { get; set; }
@@ -50,23 +50,24 @@ namespace TokenService.Model.Rest
         public int MaxUsageCount { get; set; } = 1;
 
         /// <summary>
-        /// How long a token is valid.  The default is 300 seconds.
+        /// How long a token is valid.  The default is 300 seconds so can be marked "Required"
         /// </summary>
         [Required]
         [Range(0, int.MaxValue)]
         [JsonProperty(PropertyName = "expirationIntervalSeconds")]
         public int ExpirationIntervalSeconds { get; set; } = 300;
         /// <summary>
-        /// When the token is initially valid
+        /// When the token is initially valid. Defaults to "Now" so can be marked "Required"
         /// The JWT <i>nbf</i>
         /// </summary>
+        [Required]
         [JsonProperty(PropertyName = "effectiveTime")]
         public DateTime EffectiveTime { get; set; } = DateTime.Now;
         /// <summary>
         /// Arbitrary valid json that acts as a shared context between token initiator and the validator.
         /// </summary>
         /// 
-        [JsonProperty(PropertyName = "context")]
+        [JsonProperty(PropertyName = "context", Required = Required.DisallowNull)]
         public JToken Context { get; set; }
 
         public override string ToString() => JsonConvert.SerializeObject(this);

@@ -32,9 +32,9 @@ namespace TokenService.Controllers
         public IActionResult Get()
         {
             _logger.LogDebug("Returning the hello message :)");
-            List<TokenMessage> messages = new List<TokenMessage>(new TokenMessage[] {
-                new TokenMessage(null, "You can find Swagger documentation on this service at endpoint /swagger"),
-                new TokenMessage(null, "Application code can be found on GitHub https://github.com/freemansoft/token-service")
+            List<TokenResponseMessage> messages = new List<TokenResponseMessage>(new TokenResponseMessage[] {
+                new TokenResponseMessage(null, "You can find Swagger documentation on this service at endpoint /swagger"),
+                new TokenResponseMessage(null, "Application code can be found on GitHub https://github.com/freemansoft/token-service")
             });
             return Ok(new TokenResponse(messages)
             {

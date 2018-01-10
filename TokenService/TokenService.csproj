@@ -12,6 +12,8 @@
     <RootNamespace>TokenService</RootNamespace>
     <AssemblyName>TokenService</AssemblyName>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <!-- 1/2018 no code coverage without it -->
+    <DebugType>Full</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

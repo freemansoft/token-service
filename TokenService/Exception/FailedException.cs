@@ -5,38 +5,31 @@ namespace TokenService
     /// <summary>
     /// 
     /// </summary>
-    public class TokenServiceException : System.Exception
+    public class FailedException : TokenServiceException
     {
         /// <summary>
         /// 
         /// </summary>
-        public TokenResponse ServiceResponse { get; private set; }
-
-        /// <summary>
-        /// These token service exceptions are expected to wrap a token response that will get returned to callers
-        /// </summary>
         /// <param name="message"></param>
         /// <param name="serviceResponse"></param>
-        public TokenServiceException(string message, TokenResponse serviceResponse) : base(message)
+        public FailedException(string message, TokenResponse serviceResponse) : base(message, serviceResponse)
         {
-            this.ServiceResponse = serviceResponse;
         }
 
         /// <summary>
-        /// These token service exceptions are expected to wrap a token response that will get returned to callers
+        /// 
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
         /// <param name="serviceResponse"></param>
-        public TokenServiceException(string message, System.Exception innerException, TokenResponse serviceResponse) : base(message, innerException)
+        public FailedException(string message, System.Exception innerException, TokenResponse serviceResponse) : base(message, innerException, serviceResponse)
         {
-            this.ServiceResponse = serviceResponse;
         }
 
         /// <summary>
         /// override standard Excepton constructor
         /// </summary>
-        public TokenServiceException() : base()
+        public FailedException() : base()
         {
         }
 
@@ -44,7 +37,7 @@ namespace TokenService
         /// override standard Excepton constructor
         /// </summary>
         /// <param name="message"></param>
-        public TokenServiceException(string message) : base(message)
+        public FailedException(string message) : base(message)
         {
         }
 
@@ -53,8 +46,9 @@ namespace TokenService
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public TokenServiceException(string message, System.Exception innerException) : base(message, innerException)
+        public FailedException(string message, System.Exception innerException) : base(message, innerException)
         {
         }
+
     }
 }

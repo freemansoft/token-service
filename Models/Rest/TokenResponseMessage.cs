@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TokenService.Model.Rest
 {
-    public class TokenMessage : IResponseMessage
+    public class TokenResponseMessage : IResponseMessage
     {
         /// <summary>
         /// for serialization
         /// </summary>
-        public TokenMessage()
+        public TokenResponseMessage()
         {
 
         }
@@ -18,7 +18,7 @@ namespace TokenService.Model.Rest
         /// </summary>
         /// <param name="id"></param>
         /// <param name="message"></param>
-        public TokenMessage(string id, string message)
+        public TokenResponseMessage(string id, string message)
         {
             Id = id;
             Message = message;

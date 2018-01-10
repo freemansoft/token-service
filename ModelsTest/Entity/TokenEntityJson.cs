@@ -18,7 +18,7 @@
                 ""providerName"" : ""freemansoft"",
                 ""userName"" : ""initiator@bar.com""
             },
-            ""audience"":
+            ""consumedBy"":
             [
                 {
                     ""providerName"" : ""freemansoft"",

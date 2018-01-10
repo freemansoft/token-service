@@ -5,7 +5,7 @@ namespace TokenService.Service
     /// <summary>
     /// Token validation service API
     /// </summary>
-    public interface ITokenValidationService
+    public interface ITokenValidationService : ITokenService
     {
         /// <summary>
         /// Validates the passed in token should be honored

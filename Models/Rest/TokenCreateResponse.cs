@@ -15,14 +15,14 @@ namespace TokenService.Model.Rest
         /// </summary>
         /// <param name="messages"></param>
         [JsonConstructor]
-        public TokenCreateResponse(List<TokenMessage> messages) : base(messages)
+        public TokenCreateResponse(List<TokenResponseMessage> messages) : base(messages)
         {
         }
 
         /// <summary>
         /// Primarily exists to support throwing exceptions with empty response or for unit testing.
         /// </summary>
-        public TokenCreateResponse() : this(new List<TokenMessage>())
+        public TokenCreateResponse() : this(new List<TokenResponseMessage>())
         {
 
         }

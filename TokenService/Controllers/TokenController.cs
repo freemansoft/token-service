@@ -35,7 +35,7 @@ namespace TokenService.Controllers
         /// <summary>
         /// Generate a Token.
         /// </summary>
-        /// <remarks>POST api/Token/Generate</remarks>
+        /// <remarks>POST api/v1/Token/Generate</remarks>
         /// <param name="value"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created token</response>
@@ -51,7 +51,7 @@ namespace TokenService.Controllers
         /// <summary>
         /// Validate a Token
         /// </summary>
-        /// <remarks>POST: api/Token/Validate </remarks>
+        /// <remarks>POST: api/v1/Token/Validate </remarks>
         /// <param name="value"></param>
         /// <returns></returns>
         /// <response code="200">Token was validated successfully</response>

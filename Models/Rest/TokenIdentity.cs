@@ -9,6 +9,17 @@ namespace TokenService.Model.Rest
     public class TokenIdentity : IIdentity
     {
         /// <summary>
+        /// constructor injection!
+        /// </summary>
+        /// <param name="providerName"></param>
+        /// <param name="username"></param>
+        public TokenIdentity(string providerName, string username)
+        {
+            ProviderName = providerName;
+            UserName = username;
+        }
+
+        /// <summary>
         /// Identity provider
         /// </summary>
         [JsonProperty(PropertyName = "providerName")]
@@ -17,7 +28,7 @@ namespace TokenService.Model.Rest
         /// User name set for this Identity definition
         /// </summary>
         [Required]
-        [JsonProperty(PropertyName = "userName")]
+        [JsonProperty(PropertyName = "userName", Required = Required.Always)]
         public string UserName { get; set; }
 
         public override string ToString() => JsonConvert.SerializeObject(this);
