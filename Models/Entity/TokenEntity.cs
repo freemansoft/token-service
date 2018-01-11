@@ -58,8 +58,8 @@ namespace TokenService.Model.Entity
         /// <summary>
         /// the JWT given to the user to be presented to the consuming system and passed to the validate call()
         /// </summary>
-        [JsonProperty(PropertyName = "jwt")]
-        public string JwtAsString { get; set; }
+        [JsonProperty(PropertyName = "jwtToken")]
+        public string JwtToken { get; set; }
         /// <summary>
         /// The unique identifier that was put inside the JWT. This will also act as the primary key for storage
         /// The JWT <i>jti</i>

@@ -25,6 +25,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="build_output\**" />
+    <Content Remove="build_output\**" />
+    <EmbeddedResource Remove="build_output\**" />
+    <None Remove="build_output\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" />

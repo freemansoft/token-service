@@ -24,10 +24,16 @@ namespace TokenService.Service
         /// injected
         /// </summary>
         private readonly IRepository<TokenEntity> _repository;
+
         /// <summary>
-        /// should be injected or generated
+        /// horrible temporary algorithm. Cryptographically unsound
         /// </summary>
-        private readonly string _jwtSecret = "myJwtSecret";
+        /// <returns></returns>
+        private string SecretKey()
+        {
+            // 68+68 characters
+            return Guid.NewGuid().ToString("X") + Guid.NewGuid().ToString("X");
+        }
 
         /// <summary>
         /// Constructor for Dependency injection
@@ -53,12 +59,12 @@ namespace TokenService.Service
             // yeah its circular because we store the JWT in the entity and JWT creation uses the entity fields.
             TokenEntity entity = CreateTokenEntity(request);
             string newJwt = CreateJwt(entity);
-            entity.JwtAsString = newJwt;
+            entity.JwtToken = newJwt;
             // save the entity, create a response and get out of here
             _repository.Create(entity);
             TokenCreateResponse response = new TokenCreateResponse()
             {
-                jwt = newJwt,
+                jwtToken = newJwt,
                 Version = "1.0",
             };
             return response;
@@ -83,8 +89,8 @@ namespace TokenService.Service
                 ExpirationIntervalSec = request.ExpirationIntervalSeconds,
                 ExpirationTime = now.AddSeconds(request.ExpirationIntervalSeconds),
                 InitiationTime = now,
-                JwtUniqueIdentifier = new Guid().ToString(),
-                JwtSecret = _jwtSecret,
+                JwtUniqueIdentifier = Guid.NewGuid().ToString(),
+                JwtSecret = SecretKey(),
                 ProtectedUrl = request.ProtectedUrl,
                 Version = "1.0",
             };
@@ -99,8 +105,9 @@ namespace TokenService.Service
         internal void ValidateRequest(IValidatableObject request)
         {
             ValidationContext context = new ValidationContext(request, null, null);
-            IEnumerable<ValidationResult> results = request.Validate(context);
-            this.RaiseValidationErrors(results);
+            ICollection<ValidationResult> validationResults = new List<ValidationResult>();
+            Validator.TryValidateObject(request, context, validationResults, true);
+            this.RaiseValidationErrors(validationResults);
         }
 
         internal string CreateJwt(TokenEntity entity)
@@ -124,7 +131,7 @@ namespace TokenService.Service
             JwtSecurityToken newToken = new JwtSecurityToken(header, payload);
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             string tokenString = handler.WriteToken(newToken);
-
+            entity.JwtToken = tokenString;
             return tokenString;
         }
 

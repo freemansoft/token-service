@@ -4,7 +4,7 @@
     {
         public static string TokenValidateRequest = @"{
             ""version"" : ""1.0"",
-            ""jwt"" : ""=jlsdfjkldfdlkd"",
+            ""jwtToken"" : ""=jlsdfjkldfdlkd"",
             ""protectedUrl"" : ""http://www.foobar.com""
         }";
 

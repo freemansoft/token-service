@@ -1,6 +1,6 @@
 ﻿using TokenService.Model.Rest;
 
-namespace TokenService
+namespace TokenService.Exception
 {
     /// <summary>
     /// 

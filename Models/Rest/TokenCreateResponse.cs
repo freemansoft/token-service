@@ -28,9 +28,9 @@ namespace TokenService.Model.Rest
         }
 
         /// <summary>
-        /// The jwt tokent to be added to URL or stuffed in headers when using external entity uses token
+        /// The jwt token to be added to URL or stuffed in headers when using external entity uses token
         /// </summary>
-        public string jwt;
+        public string jwtToken;
 
         public override string ToString() => JsonConvert.SerializeObject(this);
 

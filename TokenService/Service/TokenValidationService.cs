@@ -49,8 +49,9 @@ namespace TokenService.Service
         internal void ValidateRequest(IValidatableObject request)
         {
             ValidationContext context = new ValidationContext(request, null, null);
-            IEnumerable<ValidationResult> results = request.Validate(context);
-            this.RaiseValidationErrors(results);
+            ICollection<ValidationResult> validationResults = new List<ValidationResult>();
+            Validator.TryValidateObject(request, context, validationResults, true);
+            this.RaiseValidationErrors(validationResults);
         }
 
     }

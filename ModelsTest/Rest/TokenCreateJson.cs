@@ -33,7 +33,7 @@
             ]
         ";
 
-        public static string CreateTokenRequestContextEmpty = "{\n" + TokenCreateBodyWithoutContextc + EmptyContext +"\n}";
+        public static string CreateTokenRequestContextEmpty = "{\n" + TokenCreateBodyWithoutContextc + EmptyContext + "\n}";
 
         public static string CreateTokenRequestContextProperty = "{\n" + TokenCreateBodyWithoutContextc + SimpleContext + "\n}";
 
@@ -41,14 +41,14 @@
 
         public static string CreateTokenResponseMessageEmpty = @"{
             ""version"" : ""1.0"",
-            ""jwt"" : ""=asdfasdf"",
+            ""jwtToken"" : ""=asdfasdf"",
             ""messages"" : [
             ]
         }";
 
         public static string CreateTokenResponseMessageSingle = @"{
             ""version"" : ""1.0"",
-            ""jwt"" : ""=asdfasdf"",
+            ""jwtToken"" : ""=asdfasdf"",
             ""messages"" : [
                 {
                     ""id"" : ""MSG001"",

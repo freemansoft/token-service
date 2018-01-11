@@ -52,7 +52,6 @@ namespace TokenService
             services.AddTransient<ITokenValidationService, TokenValidationService>();
 
             services.AddSingleton<IRepository<TokenEntity>, TokenInMemRepository>();
-            services.AddSingleton<IRepository<AuthorizationEntity>, AuthorizationRepository>();
             // controllers
 
             // Add framework services.

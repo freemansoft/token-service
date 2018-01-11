@@ -5,7 +5,7 @@
         static string TokenEntityBodyWithoutContext = @"
             ""version"" : ""1.0"",
             ""protectedUrl"" : ""http://www.google.com"",
-            ""jwt"" : ""=xdlkjfdkjdf"",
+            ""jwtToken"" : ""=xdlkjfdkjdf"",
             ""jwtUniqueIdentifier"" : ""ADFG-ASDKL-SCFF"",
             ""jwtSecret"" : ""secret"",
             ""onBehalfOf"":

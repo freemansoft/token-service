@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TokenService.Model.Rest
 {
-    public class TokenValidateRequest: IDataVersion, IValidatableObject
+    public class TokenValidateRequest : IDataVersion, IValidatableObject
     {
         /// <summary>
         /// only a version of "1.0" is currently supported
@@ -17,8 +17,8 @@ namespace TokenService.Model.Rest
         /// The jwt tokent to be added to URL or stuffed in headers when using external entity uses token
         /// </summary>
         [Required]
-        [JsonProperty(PropertyName = "jwt")]
-        public string Jwt { get; set;  }
+        [JsonProperty(PropertyName = "jwtToken")]
+        public string JwtToken { get; set; }
 
         /// <summary>
         /// URL that this token is issued for.  The protected resource 
@@ -30,12 +30,15 @@ namespace TokenService.Model.Rest
 
         public override string ToString() => JsonConvert.SerializeObject(this);
 
+        /// <summary>
+        /// For future customization?
+        /// </summary>
+        /// <param name="validationContext"></param>
+        /// <returns></returns>
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            List<ValidationResult> results = new List<ValidationResult>();
-            bool valid = Validator.TryValidateObject(this, validationContext, results, true);
-            return results;
+            return new List<ValidationResult>();
         }
-    
+
     }
 }

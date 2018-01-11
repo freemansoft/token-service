@@ -72,11 +72,15 @@ namespace TokenService.Model.Rest
 
         public override string ToString() => JsonConvert.SerializeObject(this);
 
+        /// <summary>
+        /// For future customization?
+        /// </summary>
+        /// <param name="validationContext"></param>
+        /// <returns></returns>
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            List<ValidationResult> results = new List<ValidationResult>();
-            bool valid = Validator.TryValidateObject(this, validationContext, results, true);
-            return results;
+            return new List<ValidationResult>();
         }
+
     }
 }

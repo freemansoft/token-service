@@ -55,7 +55,7 @@ namespace TokenService.Repository
         {
             if (String.IsNullOrEmpty(id))
             {
-
+                throw new BadArgumentException("Can't retrieve token without primary key", new TokenResponse());
             }
             if (fakeStore.ContainsKey(id))
             {
