@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using TokenService.Exception;
 using TokenService.Model.Entity;
 using TokenService.Model.Rest;
 using TokenService.Repository;
@@ -26,13 +28,17 @@ namespace TokenService.Service
         private readonly IRepository<TokenEntity> _repository;
 
         /// <summary>
+        /// Constructor injected properties from appsettings.json
+        /// </summary>
+        private readonly IOptions<CryptographySettings> _cryptoSettings;
+
+        /// <summary>
         /// horrible temporary algorithm. Cryptographically unsound
         /// </summary>
         /// <returns></returns>
         private string SecretKey()
         {
-            // 68+68 characters
-            return Guid.NewGuid().ToString("X") + Guid.NewGuid().ToString("X");
+            return _cryptoSettings.Value.JwtSecret;
         }
 
         /// <summary>
@@ -40,10 +46,18 @@ namespace TokenService.Service
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="repository"></param>
-        public TokenCreationService(ILogger<TokenCreationService> logger, IRepository<TokenEntity> repository)
+        /// <param name="cryptoSettings">the JST Token secret</param>
+        public TokenCreationService(ILogger<TokenCreationService> logger, IRepository<TokenEntity> repository, IOptions<CryptographySettings> cryptoSettings)
         {
+#pragma warning disable IDE0016 
+            if (logger == null) { throw new BadArgumentException("logger null when creating TokenCreationService"); }
+            if (repository == null) { throw new BadArgumentException("repository null when creating TokenCreationService"); }
+#pragma warning restore IDE0016 
+            if (cryptoSettings == null) { throw new BadArgumentException("cryptoSettings null when creating TokenCreationService"); }
+            if (cryptoSettings.Value.JwtSecret == null) { throw new BadArgumentException("cryptosettings is missing the JWT secret seed value"); }
             _logger = logger;
             _repository = repository;
+            _cryptoSettings = cryptoSettings;
         }
 
         /// <summary>
@@ -97,20 +111,23 @@ namespace TokenService.Service
             return entity;
         }
 
-#pragma warning disable CA1822
         /// <summary>
         /// throws BadArgumentException if there is a problem with the token.
         /// </summary>
         /// <param name="request"></param>
+#pragma warning disable CA1822
         internal void ValidateRequest(IValidatableObject request)
         {
+#pragma warning restore CA1822
             ValidationContext context = new ValidationContext(request, null, null);
             ICollection<ValidationResult> validationResults = new List<ValidationResult>();
             Validator.TryValidateObject(request, context, validationResults, true);
             this.RaiseValidationErrors(validationResults);
         }
 
+#pragma warning disable CA1822
         internal string CreateJwt(TokenEntity entity)
+#pragma warning restore CA1822
         {
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(entity.JwtSecret));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);

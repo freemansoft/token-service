@@ -6,15 +6,18 @@ namespace TokenService.ModelTest.Rest
 {
     public class TokenResponseTest
     {
-#pragma warning disable CA1822
         [Fact]
+#pragma warning disable CA1822
         public void ZeroArg()
+#pragma warning restore CA1822 
         {
             Assert.NotNull(new TokenResponse().Messages);
         }
 
         [Fact]
+#pragma warning disable CA1822
         public void TestToString()
+#pragma warning restore CA1822 
         {
             List<TokenResponseMessage> messages = new List<TokenResponseMessage>()
             {

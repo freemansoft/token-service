@@ -47,6 +47,7 @@ namespace TokenService.Service
         /// </summary>
         /// <param name="request"></param>
         internal void ValidateRequest(IValidatableObject request)
+#pragma warning restore CA1822
         {
             ValidationContext context = new ValidationContext(request, null, null);
             ICollection<ValidationResult> validationResults = new List<ValidationResult>();

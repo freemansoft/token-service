@@ -43,6 +43,7 @@ namespace TokenService
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CryptographySettings>(Configuration.GetSection("CryptographySettings"));
             services.AddLogging();
 
             // DI container - AddTransient(), AddScoped(), AddSingleton()
