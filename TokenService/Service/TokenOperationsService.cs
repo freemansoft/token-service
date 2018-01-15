@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Text.RegularExpressions;
 using TokenService.Exception;
 using TokenService.Model.Entity;
 using TokenService.Model.Rest;
@@ -16,12 +17,12 @@ namespace TokenService.Service
     /// <summary>
     /// Token creation and managment service implementation
     /// </summary>
-    public class TokenCreationService : ITokenCreationService
+    public class TokenOperationsService : ITokenOperationsService
     {
         /// <summary>
         /// injected
         /// </summary>
-        private readonly ILogger<TokenCreationService> _logger;
+        private readonly ILogger<TokenOperationsService> _logger;
         /// <summary>
         /// injected
         /// </summary>
@@ -47,7 +48,7 @@ namespace TokenService.Service
         /// <param name="logger"></param>
         /// <param name="repository"></param>
         /// <param name="cryptoSettings">the JST Token secret</param>
-        public TokenCreationService(ILogger<TokenCreationService> logger, IRepository<TokenEntity> repository, IOptions<CryptographySettings> cryptoSettings)
+        public TokenOperationsService(ILogger<TokenOperationsService> logger, IRepository<TokenEntity> repository, IOptions<CryptographySettings> cryptoSettings)
         {
 #pragma warning disable IDE0016 
             if (logger == null) { throw new BadArgumentException("logger null when creating TokenCreationService"); }
@@ -66,7 +67,7 @@ namespace TokenService.Service
         /// FailedException if there was some other problem
         /// </summary>
         /// <param name="request"></param>
-        /// <returns></returns>
+        /// <returns>A response containing the token</returns>
         public TokenCreateResponse CreateToken(TokenCreateRequest request)
         {
             ValidateRequest(request);
@@ -85,16 +86,43 @@ namespace TokenService.Service
         }
 
         /// <summary>
+        /// Validates the passed in token should be honored
+        /// Returns the response.  Throws an exception containing a response if it fails
+        /// BadArgumentException if the request is bad
+        /// FailedException if there was some other problem
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>context information from the token</returns>
+        public TokenValidateResponse ValidateToken(TokenValidateRequest request)
+        {
+            ValidateRequest(request);
+            string jwtEncodedString = request.JwtToken;
+            string protectedUrl = request.ProtectedUrl;
+            // convert string to POCO
+            JwtSecurityToken jwtToken = new JwtSecurityToken(jwtEncodedString);
+            TokenEntity jwtTokenEntity = _repository.GetById(jwtToken.Id);
+            // validate the basic token and the URL
+            ValidateEncodedJwt(jwtToken, jwtTokenEntity, request.ProtectedUrl);
+            // assuming we validated and found it
+            TokenValidateResponse response = new TokenValidateResponse()
+            {
+                Version = "1.0",
+                Context = jwtTokenEntity.Context
+            };
+
+            return response;
+        }
+
+        /// <summary>
         /// Creates an entity from a submitted requests.  The entity is not complete until a JWT has been added to it.
-        /// This means the entity must be mutable :-(
+        /// This means the entity must be muta)ble :-(
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         internal TokenEntity CreateTokenEntity(TokenCreateRequest request)
         {
             DateTime now = DateTime.Now;
-            // TODO create initiator for this constructor. We set obo as property below
-            // TODO get initiator from request or security context
+            // TODO create initiator for this constructor. Get initiator from request or security context. We set obo as property below.
             // Consumed by is initially empty and updated by Validate()
             TokenEntity entity = new TokenEntity(new TokenIdentityEntity(request.OnBehalfOf.ProviderName, request.OnBehalfOf.UserName), null)
             {
@@ -150,6 +178,42 @@ namespace TokenService.Service
             string tokenString = handler.WriteToken(newToken);
             entity.JwtToken = tokenString;
             return tokenString;
+        }
+
+
+        /// <summary>
+        /// This thows an exception on validation failure. 
+        /// Should it return something instead?
+        /// </summary>
+        /// <param name="jwtToken">token submitted as part of validation request</param>
+        /// <param name="jwtTokenEntity">token retrieved from the token store</param>
+        /// <param name="targetUrl">url validation request is being made for</param>
+        internal void ValidateEncodedJwt(JwtSecurityToken jwtToken, TokenEntity jwtTokenEntity, string targetUrl)
+        {
+            // they should always match since we use the jwtToken "id" to retrieve the jwtTokenEntity from the store
+            if (!jwtTokenEntity.Id.Equals(jwtToken.Id))
+            {
+                _logger.LogWarning(
+                    "JWT Token ID {0} does not match store token ID {1}", jwtToken.Id, jwtTokenEntity.Id);
+                throw new FailedException(String.Format(
+                    "JWT Token ID {0} does not match store token ID {1}", jwtToken.Id, jwtTokenEntity.Id));
+            }
+            // Validate the requested URL against the URL the token was created for
+            // Note that this is a SOFT match anchored at the start
+            // todo add support for real regex or hard/soft.
+            Regex ourRegex = new Regex("^" + jwtTokenEntity.ProtectedUrl, RegexOptions.IgnoreCase);
+            Match urlRegexResults = ourRegex.Match(targetUrl);
+            if (!urlRegexResults.Success)
+            {
+                _logger.LogWarning(
+                    "Requested url {0} does not match store token protected url {1}", targetUrl, jwtTokenEntity.ProtectedUrl);
+                throw new FailedException(String.Format(
+                    "Requested url {0} does not match store token protected url {1}", targetUrl, jwtTokenEntity.ProtectedUrl));
+            }
+            // now validate the signature using keys
+            // TODO add signature validation
+
+            // victory!
         }
 
     }

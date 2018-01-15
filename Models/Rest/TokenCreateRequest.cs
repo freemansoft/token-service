@@ -30,7 +30,8 @@ namespace TokenService.Model.Rest
         [JsonProperty(PropertyName = "version", Required = Required.Always)]
         public string Version { get; set; }
         /// <summary>
-        /// URL that this token is issued for.  The protected resource.
+        /// URL that this token is issued for.  The protected resource. 
+        /// Matched with Regex "^"+ProtectedUrl
         /// The <i>sub</i> in the JWT
         /// </summary>
         [Required]

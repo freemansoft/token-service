@@ -56,5 +56,14 @@ namespace TokenService.Exception
         public TokenServiceException(string message, System.Exception innerException) : base(message, innerException)
         {
         }
+
+        /// <summary>
+        /// Include the service response
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return base.ToString() + " ServiceResponse: " + ServiceResponse.ToString();
+        }
     }
 }

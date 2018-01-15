@@ -16,8 +16,8 @@ namespace TokenService.Controllers
 
         private readonly ILogger<TokenController> _logger;
 
-        private readonly ITokenCreationService _creationService;
-        private readonly ITokenValidationService _validationService;
+        private readonly ITokenOperationsService _creationService;
+        private readonly ITokenOperationsService _validationService;
 
         /// <summary>
         /// constructor based injection
@@ -25,7 +25,7 @@ namespace TokenService.Controllers
         /// <param name="creationService"></param>
         /// <param name="validationService"></param>
         /// <param name="logger"></param>
-        public TokenController(ITokenCreationService creationService, ITokenValidationService validationService, ILogger<TokenController> logger)
+        public TokenController(ITokenOperationsService creationService, ITokenOperationsService validationService, ILogger<TokenController> logger)
         {
             _creationService = creationService;
             _validationService = validationService;

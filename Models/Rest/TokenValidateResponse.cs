@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace TokenService.Model.Rest
 {
-    public class TokenValidateResponse: TokenResponse
+    public class TokenValidateResponse : TokenResponse
     {
         /// <summary>
         /// This constructor is required so that the JSON serializer knows which concreate class to use for a proprty declared as an interface
@@ -28,8 +28,8 @@ namespace TokenService.Model.Rest
         /// <summary>
         /// Arbitrary valid json that acts as a shared context between token initiator and the validator.
         /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public JToken context;
+        [JsonProperty(PropertyName = "context", NullValueHandling = NullValueHandling.Ignore)]
+        public JToken Context { get; set; }
 
         public override string ToString() => JsonConvert.SerializeObject(this);
 

@@ -13,7 +13,10 @@ using TokenService.Service;
 namespace TokenService
 {
     /// <summary>
-    /// The cannonical startup class
+    /// The cannonical startup class.
+    /// <para></para>
+    /// https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments#startup-conventions
+    /// Startup classes can determine their runtime environment or be named with the environment as a suffix
     /// </summary>
     public class Startup
     {
@@ -32,7 +35,7 @@ namespace TokenService
         }
 
         /// <summary>
-        /// boilerplate
+        /// Configuration Properties contianer
         /// </summary>
         public IConfigurationRoot Configuration { get; }
 
@@ -49,9 +52,8 @@ namespace TokenService
             // DI container - AddTransient(), AddScoped(), AddSingleton()
             // persistance
             // services
-            services.AddTransient<ITokenCreationService, TokenCreationService>();
-            services.AddTransient<ITokenValidationService, TokenValidationService>();
-
+            services.AddTransient<ITokenOperationsService, TokenOperationsService>();
+            // a single repository for all requests
             services.AddSingleton<IRepository<TokenEntity>, TokenInMemRepository>();
             // controllers
 
@@ -76,6 +78,9 @@ namespace TokenService
         /// <summary>
         /// https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <para></para>
+        /// https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup 
+        /// IHostingEnvironment and ILoggerFactory may be specified in method signature
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>

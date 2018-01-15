@@ -50,7 +50,8 @@ namespace TokenService.Model.Entity
         [JsonProperty(PropertyName = "version", Required = Required.Always)]
         public string Version { get; set; } = "1.0";
         /// <summary>
-        /// url protected by this token
+        /// url protected by this token.
+        /// Matched with Regex "^"+ProtectedUrl
         /// The JWT <i>sub</i>
         /// </summary>
         [JsonProperty(PropertyName = "protectedUrl")]

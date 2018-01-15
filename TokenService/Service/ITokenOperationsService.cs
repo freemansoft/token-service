@@ -3,10 +3,17 @@
 namespace TokenService.Service
 {
     /// <summary>
-    /// Token validation service API
+    /// Token creation and managment service API
     /// </summary>
-    public interface ITokenValidationService : ITokenService
+    public interface ITokenOperationsService : ITokenService
     {
+        /// <summary>
+        /// Creates a token and returns it in the response. Throws an exception wrapping the response if there is an error.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        TokenCreateResponse CreateToken(TokenCreateRequest request);
+
         /// <summary>
         /// Validates the passed in token should be honored
         /// Returns the response.  Throws an exception containing a response if it fails
@@ -14,5 +21,7 @@ namespace TokenService.Service
         /// <param name="request"></param>
         /// <returns></returns>
         TokenValidateResponse ValidateToken(TokenValidateRequest request);
+
     }
+
 }
