@@ -7,7 +7,7 @@ namespace TokenService
     /// <summary>
     /// generated program class
     /// </summary>
-    public class Program
+    static class Program
     {
         /// <summary>
         /// the main method

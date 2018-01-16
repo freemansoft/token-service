@@ -43,9 +43,13 @@ namespace TokenService.Controllers
         [HttpPost("Generate", Name = "GenerateToken")]
         [ProducesResponseType(typeof(TokenCreateResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(TokenCreateResponse), StatusCodes.Status400BadRequest)]
-        public IActionResult Post([FromBody]TokenCreateRequest value)
+        public IActionResult Create([FromBody]TokenCreateRequest value)
         {
-            return BadRequest(new TokenCreateResponse());
+            TokenCreateResponse response = _creationService.CreateToken(value);
+            // how do we code this?
+            // return StatusCode(201, response);
+            // or 
+            return Created("../Validate", response);
         }
 
         /// <summary>
@@ -63,9 +67,10 @@ namespace TokenService.Controllers
         [ProducesResponseType(typeof(TokenValidateResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(TokenValidateResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(TokenValidateResponse), StatusCodes.Status409Conflict)]
-        public IActionResult Post([FromBody]TokenValidateRequest value)
+        public IActionResult Validate([FromBody]TokenValidateRequest value)
         {
-            return NotFound(new TokenCreateResponse());
+            TokenValidateResponse response = _validationService.ValidateToken(value);
+            return Ok(response);
         }
 
         /*

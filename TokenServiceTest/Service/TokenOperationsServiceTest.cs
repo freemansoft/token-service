@@ -1,8 +1,5 @@
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
-using Newtonsoft.Json.Linq;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using TokenService.Exception;
 using TokenService.Model.Entity;
@@ -21,22 +18,19 @@ namespace TokenServiceTest
         /// </summary>
         private readonly ITestOutputHelper _output;
 
-        /// <summary>
-        /// Note that this is anchored at the beginning of a line
-        /// </summary>
-        private string _protectedUrl = "http://myurl.com";
-
-        private ILogger<TokenOperationsService> logger;
         private TokenInMemRepository inMemoryRepo;
-        private TokenOperationsService underTest;
+        private ILogger<TokenOperationsService> serviceLogger;
+        private TokenOperationsService serviceUnderTest;
+
+        private TokenTestUtils ttu = new TokenTestUtils();
 
 
         public TokenOperationsServiceTest(ITestOutputHelper output)
         {
             this._output = output;
-            logger = Mock.Of<ILogger<TokenOperationsService>>();
+            serviceLogger = Mock.Of<ILogger<TokenOperationsService>>();
             inMemoryRepo = new TokenInMemRepository();
-            underTest = new TokenOperationsService(logger, inMemoryRepo, BuildCryptographySettings());
+            serviceUnderTest = new TokenOperationsService(serviceLogger, inMemoryRepo, ttu.BuildCryptographySettings());
 
         }
 
@@ -50,7 +44,7 @@ namespace TokenServiceTest
             TokenCreateRequest request = new TokenCreateRequest(null);
             try
             {
-                TokenCreateResponse response = underTest.CreateToken(request);
+                TokenCreateResponse response = serviceUnderTest.CreateToken(request);
                 Assert.True(false, "Should have thrown an exception");
             }
             catch (BadArgumentException e)
@@ -63,11 +57,11 @@ namespace TokenServiceTest
         [Fact]
         public void CreateTokenForceValidationError()
         {
-            TokenCreateRequest request = BuildTokenCreateRequest();
+            TokenCreateRequest request = ttu.BuildTokenCreateRequest();
             request.Version = null;
             try
             {
-                TokenCreateResponse createResult = underTest.CreateToken(request);
+                TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
                 Assert.False(true, "Create Token should have failed model validation");
             }
             catch (BadArgumentException e)
@@ -79,46 +73,17 @@ namespace TokenServiceTest
         [Fact]
         public void CreateTokenSuccess()
         {
-            TokenCreateRequest request = BuildTokenCreateRequest();
-            TokenCreateResponse createResult = underTest.CreateToken(request);
+            TokenCreateRequest request = ttu.BuildTokenCreateRequest();
+            TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
             Assert.NotNull(createResult);
-            Assert.NotNull(createResult.jwtToken);
-            _output.WriteLine("Calculated Token Encoded : " + createResult.jwtToken);
+            Assert.NotNull(createResult.JwtToken);
+            _output.WriteLine("Calculated Token Encoded : " + createResult.JwtToken);
 
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken foundToken = tokenHandler.ReadJwtToken(createResult.jwtToken);
+            JwtSecurityToken foundToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
             Assert.NotNull(foundToken);
-            Assert.Equal(_protectedUrl, foundToken.Payload.Sub);
+            Assert.Equal(ttu.bogusTestUrl, foundToken.Payload.Sub);
         }
-
-        /// <summary>
-        /// Test key needs to be >= 128 characters
-        /// </summary>
-        /// <returns></returns>
-        internal IOptions<CryptographySettings> BuildCryptographySettings()
-        {
-            CryptographySettings mySeTings = new CryptographySettings()
-            {
-                // 68+68 characters
-                JwtSecret = Guid.NewGuid().ToString("X") + Guid.NewGuid().ToString("X")
-            };
-
-            return Options.Create<CryptographySettings>(mySeTings);
-        }
-
-        internal TokenCreateRequest BuildTokenCreateRequest()
-        {
-            TokenIdentity obo = new TokenIdentity(null, "testid");
-            TokenCreateRequest request = new TokenCreateRequest(obo)
-            {
-                ProtectedUrl = _protectedUrl,
-                Version = "1.0",
-                Context = JObject.Parse(@"{ ""x"":""value""}"),
-            };
-            return request;
-
-        }
-
 
         /********************************************************************************
          * 
@@ -135,7 +100,7 @@ namespace TokenServiceTest
             TokenValidateRequest request = new TokenValidateRequest();
             try
             {
-                TokenValidateResponse response = underTest.ValidateToken(request);
+                TokenValidateResponse response = serviceUnderTest.ValidateToken(request);
                 Assert.True(false, "Should have thrown an exception");
             }
             catch (BadArgumentException e)
@@ -152,23 +117,23 @@ namespace TokenServiceTest
         [Fact]
         public void ValidateEncodedJwtBadId()
         {
-            TokenCreateRequest request = BuildTokenCreateRequest();
+            TokenCreateRequest request = ttu.BuildTokenCreateRequest();
             // added this catch block in when we failed creating tokens because regex didn't fit in URL validation.
             // The tangled web we weave
             try
             {
-                TokenCreateResponse createResult = underTest.CreateToken(request);
+                TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
 
-                Assert.NotNull(createResult.jwtToken);
+                Assert.NotNull(createResult.JwtToken);
                 JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-                JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.jwtToken);
+                JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
                 TokenEntity badEntity = new TokenEntity(null, null)
                 {
                     JwtUniqueIdentifier = "dogfood"
                 };
                 try
                 {
-                    underTest.ValidateEncodedJwt(receivedToken, badEntity, badEntity.ProtectedUrl);
+                    serviceUnderTest.ValidateEncodedJwt(receivedToken, badEntity, badEntity.ProtectedUrl);
                     Assert.False(true, "Expected FailedException");
                 }
                 catch (FailedException e)
@@ -185,17 +150,17 @@ namespace TokenServiceTest
         [Fact]
         public void ValidateEncodedJwtBadUrl()
         {
-            TokenCreateRequest request = BuildTokenCreateRequest();
-            TokenCreateResponse createResult = underTest.CreateToken(request);
-            Assert.NotNull(createResult.jwtToken);
+            TokenCreateRequest request = ttu.BuildTokenCreateRequest();
+            TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
+            Assert.NotNull(createResult.JwtToken);
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.jwtToken);
+            JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
             Assert.NotNull(receivedToken);
             TokenEntity foundEntity = inMemoryRepo.GetById(receivedToken.Id);
             Assert.NotNull(foundEntity);
             try
             {
-                underTest.ValidateEncodedJwt(receivedToken, foundEntity, "http://badurl");
+                serviceUnderTest.ValidateEncodedJwt(receivedToken, foundEntity, "http://badurl");
                 Assert.False(true, "Expected FailedException");
             }
             catch (FailedException e)
@@ -207,17 +172,17 @@ namespace TokenServiceTest
         [Fact]
         public void ValidateEncodedJwtBadUrlAnchor()
         {
-            TokenCreateRequest request = BuildTokenCreateRequest();
-            TokenCreateResponse createResult = underTest.CreateToken(request);
-            Assert.NotNull(createResult.jwtToken);
+            TokenCreateRequest request = ttu.BuildTokenCreateRequest();
+            TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
+            Assert.NotNull(createResult.JwtToken);
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.jwtToken);
+            JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
             Assert.NotNull(receivedToken);
             TokenEntity foundEntity = inMemoryRepo.GetById(receivedToken.Id);
             Assert.NotNull(foundEntity);
             try
             {
-                underTest.ValidateEncodedJwt(receivedToken, foundEntity, "x" + foundEntity.ProtectedUrl);
+                serviceUnderTest.ValidateEncodedJwt(receivedToken, foundEntity, "x" + foundEntity.ProtectedUrl);
                 Assert.False(true, "Expected FailedException");
             }
             catch (FailedException e)
@@ -238,17 +203,17 @@ namespace TokenServiceTest
         [Fact]
         public void ValidateEncodedJwtSuccess()
         {
-            TokenCreateRequest request = BuildTokenCreateRequest();
-            TokenCreateResponse createResult = underTest.CreateToken(request);
-            Assert.NotNull(createResult.jwtToken);
+            TokenCreateRequest request = ttu.BuildTokenCreateRequest();
+            TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
+            Assert.NotNull(createResult.JwtToken);
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.jwtToken);
+            JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
             Assert.NotNull(receivedToken);
             TokenEntity foundEntity = inMemoryRepo.GetById(receivedToken.Id);
             Assert.NotNull(foundEntity);
             try
             {
-                underTest.ValidateEncodedJwt(receivedToken, foundEntity, foundEntity.ProtectedUrl + "dogfood");
+                serviceUnderTest.ValidateEncodedJwt(receivedToken, foundEntity, foundEntity.ProtectedUrl + "dogfood");
             }
             catch (FailedException e)
             {
@@ -262,22 +227,17 @@ namespace TokenServiceTest
         [Fact]
         public void ValidateToken()
         {
-            TokenCreateRequest request = BuildTokenCreateRequest();
-            TokenCreateResponse createResult = underTest.CreateToken(request);
-            Assert.NotNull(createResult.jwtToken);
+            TokenCreateRequest request = ttu.BuildTokenCreateRequest();
+            TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
+            Assert.NotNull(createResult.JwtToken);
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.jwtToken);
+            JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
             Assert.NotNull(receivedToken);
             // create validation request from the data used to create the token
-            TokenValidateRequest validateThis = new TokenValidateRequest()
-            {
-                Version = "1.0",
-                JwtToken = createResult.jwtToken,
-                ProtectedUrl = request.ProtectedUrl
-            };
+            TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedUrl);
             try
             {
-                TokenValidateResponse response = underTest.ValidateToken(validateThis);
+                TokenValidateResponse response = serviceUnderTest.ValidateToken(validateThis);
                 // jam a context validation into this test also. probably should be broken out into its own test in the future
                 Assert.NotNull(response.Context);
             }

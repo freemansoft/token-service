@@ -79,7 +79,7 @@ namespace TokenService.Service
             _repository.Create(entity);
             TokenCreateResponse response = new TokenCreateResponse()
             {
-                jwtToken = newJwt,
+                JwtToken = newJwt,
                 Version = "1.0",
             };
             return response;
