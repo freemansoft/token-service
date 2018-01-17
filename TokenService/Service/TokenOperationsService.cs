@@ -103,6 +103,7 @@ namespace TokenService.Service
             TokenEntity jwtTokenEntity = _repository.GetById(jwtToken.Id);
             // validate the basic token and the URL
             ValidateEncodedJwt(jwtToken, jwtTokenEntity, request.ProtectedUrl);
+            TokenEntity postValidationEntity = ValidateExpirationPolicy(jwtTokenEntity);
             // assuming we validated and found it
             TokenValidateResponse response = new TokenValidateResponse()
             {
@@ -214,6 +215,41 @@ namespace TokenService.Service
             // TODO add signature validation
 
             // victory!
+        }
+
+        /// <summary>
+        /// This thows an exception on validation failure. 
+        /// Should it return something instead?
+        /// Mutates the passed in TokenEntity!  This is a bad idea.
+        /// </summary>
+        /// <param name="jwtTokenEntity">token retrieved from the token store</param>
+        /// <returns>Updated TokenEntity that has to be re-saved to DB to update statistics</returns>
+        internal TokenEntity ValidateExpirationPolicy(TokenEntity jwtTokenEntity)
+        {
+            DateTime rightNow = DateTime.Now;
+            if (jwtTokenEntity.MaxUseCount > jwtTokenEntity.CurrentUseCount + 1)
+            {
+                // under max use count
+                jwtTokenEntity.CurrentUseCount++;
+            }
+            else
+            {
+                throw new FailedException("Token exceeded max use count " + jwtTokenEntity.MaxUseCount);
+            }
+
+            // Comparison returns <1 if rightNow is prior to jwtTokenEntity.ExpirationTime
+            // Comparison returns >1 if rightNow is later than jwtTokenEntity.ExpirationTime
+            if (DateTime.Compare(rightNow, jwtTokenEntity.ExpirationTime) < 0)
+            {
+                // time limit exceeded
+                _logger.LogDebug("Token validated ", jwtTokenEntity.Id);
+            }
+            else
+            {
+                throw new FailedException("Token expired failed now: " + rightNow + " vs expirationTime: " + jwtTokenEntity.ExpirationTime);
+            }
+            // todo make TokenEntity immutable
+            return jwtTokenEntity;
         }
 
     }

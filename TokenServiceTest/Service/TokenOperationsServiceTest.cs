@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Moq;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using TokenService.Exception;
 using TokenService.Model.Entity;
@@ -225,7 +226,7 @@ namespace TokenServiceTest
         /// don't have anegative validation test mostly because ValidateEncodedJwt() does all the heavy lifting
         /// </summary>
         [Fact]
-        public void ValidateToken()
+        public void ValidateTokenHappy()
         {
             TokenCreateRequest request = ttu.BuildTokenCreateRequest();
             TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
@@ -237,6 +238,7 @@ namespace TokenServiceTest
             TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedUrl);
             try
             {
+                // test ValidateToken happy path
                 TokenValidateResponse response = serviceUnderTest.ValidateToken(validateThis);
                 // jam a context validation into this test also. probably should be broken out into its own test in the future
                 Assert.NotNull(response.Context);
@@ -246,5 +248,58 @@ namespace TokenServiceTest
                 Assert.False(true, "Caught unexpected exception: " + e.Message + " " + e.ServiceResponse);
             }
         }
+
+        [Fact]
+        public void ExpirationPolicyValid()
+        {
+            TokenEntity anEntity = new TokenEntity()
+            {
+                // TODO validate the actual exception
+            };
+            serviceUnderTest.ValidateExpirationPolicy(anEntity);
+        }
+
+        [Fact]
+        public void ExpirationPolicyExpiredTime()
+        {
+            TokenEntity anEntity = new TokenEntity()
+            {
+                InitiationTime = DateTime.Now.AddDays(-2.0),
+                ExpirationTime = DateTime.Now.AddDays(-1.0),
+                MaxUseCount = int.MaxValue,
+                CurrentUseCount = 0,
+            };
+            try
+            {
+                serviceUnderTest.ValidateExpirationPolicy(anEntity);
+                Assert.False(true, "Should have failed due to time based expiration");
+            }
+            catch (FailedException e)
+            {
+                // TODO validate the actual exception
+            }
+        }
+
+        [Fact]
+        public void ExpirationPolicyExceededCount()
+        {
+            TokenEntity anEntity = new TokenEntity()
+            {
+                InitiationTime = DateTime.Now.AddDays(-2.0),
+                ExpirationTime = DateTime.Now.AddDays(1.0),
+                MaxUseCount = 1,
+                CurrentUseCount = 1,
+            };
+            try
+            {
+                serviceUnderTest.ValidateExpirationPolicy(anEntity);
+                Assert.False(true, "Should have failed due exceeded usage count");
+            }
+            catch (FailedException e)
+            {
+
+            }
+        }
+
     }
 }
