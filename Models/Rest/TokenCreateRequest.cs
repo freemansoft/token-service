@@ -47,11 +47,14 @@ namespace TokenService.Model.Rest
         /// <summary>
         /// The maximum number of times this token can be used. The default is 1.
         /// </summary>
+        [Range(1, int.MaxValue)]
         [JsonProperty(PropertyName = "maxUsageCount")]
         public int MaxUsageCount { get; set; } = 1;
 
         /// <summary>
-        /// How long a token is valid.  The default is 300 seconds so can be marked "Required"
+        /// How long a token is valid.  
+        /// TokenService calculates expiration date/time adding this to DateTime.Now;
+        /// The default is 300 seconds so can be marked "Required"
         /// </summary>
         [Required]
         [Range(0, int.MaxValue)]
