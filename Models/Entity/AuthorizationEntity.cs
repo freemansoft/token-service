@@ -9,6 +9,14 @@ namespace TokenService.Model.Entity
     public class AuthorizationEntity : IIdentity, IDataVersion, IHasId
     {
         /// <summary>
+        /// zero arg constructor
+        /// </summary>
+        public AuthorizationEntity()
+        {
+            Version = "1.0";
+        }
+
+        /// <summary>
         /// only a version of "1.0" is currently supported
         /// </summary>
         [JsonProperty(PropertyName = "version")]

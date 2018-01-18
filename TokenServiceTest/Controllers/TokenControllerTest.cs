@@ -17,6 +17,7 @@ namespace TokenServiceTest.Controllers
         /// </summary>
         private readonly ITestOutputHelper _output;
 
+        private ILogger<TokenInMemRepository> repositoryLogger;
         private TokenInMemRepository inMemoryRepo;
         private ILogger<TokenOperationsService> serviceLogger;
         private TokenOperationsService serviceUnderTest;
@@ -30,8 +31,9 @@ namespace TokenServiceTest.Controllers
         {
             this._output = output;
             serviceLogger = Mock.Of<ILogger<TokenOperationsService>>();
+            repositoryLogger = Mock.Of<ILogger<TokenInMemRepository>>();
             controllerLogger = Mock.Of<ILogger<TokenController>>();
-            inMemoryRepo = new TokenInMemRepository();
+            inMemoryRepo = new TokenInMemRepository(repositoryLogger);
             serviceUnderTest = new TokenOperationsService(serviceLogger, inMemoryRepo, ttu.BuildCryptographySettings());
         }
 

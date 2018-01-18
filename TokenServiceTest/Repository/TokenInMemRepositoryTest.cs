@@ -1,4 +1,6 @@
-﻿using TokenService.Exception;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using TokenService.Exception;
 using TokenService.Model.Entity;
 using TokenService.Repository;
 using Xunit;
@@ -9,17 +11,20 @@ namespace TokenServiceTest.Repository
     public class TokenInMemRepositoryTest
     {
         private readonly ITestOutputHelper output;
+        private ILogger<TokenInMemRepository> repositoryLogger;
+        TokenInMemRepository ut;
 
         public TokenInMemRepositoryTest(ITestOutputHelper output)
         {
             this.output = output;
+            repositoryLogger = Mock.Of<ILogger<TokenInMemRepository>>();
+            ut = new TokenInMemRepository(repositoryLogger);
         }
 
 
         [Fact]
         public void CreateNullEntity()
         {
-            TokenInMemRepository ut = new TokenInMemRepository();
             try
             {
                 ut.Create(null);
@@ -36,7 +41,6 @@ namespace TokenServiceTest.Repository
         {
             // create no key
             TokenEntity myEntity = new TokenEntity(null, null);
-            TokenInMemRepository ut = new TokenInMemRepository();
             try
             {
                 ut.Create(myEntity);
@@ -51,7 +55,6 @@ namespace TokenServiceTest.Repository
         [Fact]
         public void GetNullId()
         {
-            TokenInMemRepository ut = new TokenInMemRepository();
             try
             {
                 ut.GetById(null);
@@ -69,7 +72,6 @@ namespace TokenServiceTest.Repository
             TokenIdentityEntity obo = new TokenIdentityEntity("myIdentityProvider", "myUsername");
             TokenIdentityEntity initiator = new TokenIdentityEntity("myIdentityProvider", "myUsername");
             TokenEntity myEntity = CreateValidTokenEntity(obo, initiator);
-            TokenInMemRepository ut = new TokenInMemRepository();
             try
             {
                 ut.Create(myEntity);
@@ -86,7 +88,6 @@ namespace TokenServiceTest.Repository
         [Fact]
         public void DeleteNull()
         {
-            TokenInMemRepository ut = new TokenInMemRepository();
             try
             {
                 ut.Delete(null);
@@ -102,7 +103,6 @@ namespace TokenServiceTest.Repository
         public void DeleteNullKey()
         {
             TokenEntity myEntity = CreateValidTokenEntity(null, null);
-            TokenInMemRepository ut = new TokenInMemRepository();
             myEntity.JwtUniqueIdentifier = null;
             try
             {
@@ -121,7 +121,6 @@ namespace TokenServiceTest.Repository
             TokenIdentityEntity obo = new TokenIdentityEntity("myIdentityProvider", "myUsername");
             TokenIdentityEntity initiator = new TokenIdentityEntity("myIdentityProvider", "myUsername");
             TokenEntity myEntity = CreateValidTokenEntity(obo, initiator);
-            TokenInMemRepository ut = new TokenInMemRepository();
             try
             {
                 ut.Create(myEntity);
@@ -142,7 +141,6 @@ namespace TokenServiceTest.Repository
             TokenIdentityEntity obo = new TokenIdentityEntity("myIdentityProvider", "myUsername");
             TokenIdentityEntity initiator = new TokenIdentityEntity("myIdentityProvider", "myUsername");
             TokenEntity myEntity = CreateValidTokenEntity(obo, initiator);
-            TokenInMemRepository ut = new TokenInMemRepository();
             try
             {
                 ut.Create(myEntity);
@@ -160,8 +158,7 @@ namespace TokenServiceTest.Repository
         [Fact]
         public void UpdateNullEntity()
         {
-            TokenInMemRepository ut = new TokenInMemRepository();
-            try
+           try
             {
                 ut.Update(null);
                 Assert.False(true);
@@ -177,7 +174,6 @@ namespace TokenServiceTest.Repository
         {
             // create no key
             TokenEntity myEntity = new TokenEntity(null, null);
-            TokenInMemRepository ut = new TokenInMemRepository();
             try
             {
                 ut.Update(myEntity);
@@ -197,7 +193,6 @@ namespace TokenServiceTest.Repository
             TokenIdentityEntity initiator1 = new TokenIdentityEntity("myIdentityProvider", "myUsername1");
             TokenEntity myEntity1 = CreateValidTokenEntity(obo1, initiator1);
             TokenEntity myEntity2 = CreateValidTokenEntity(obo2, initiator1);
-            TokenInMemRepository ut = new TokenInMemRepository();
             try
             {
                 ut.Create(myEntity1);
@@ -219,7 +214,6 @@ namespace TokenServiceTest.Repository
             TokenIdentityEntity initiator1 = new TokenIdentityEntity("myIdentityProvider", "myUsername1");
             TokenEntity myEntity1 = CreateValidTokenEntity(obo1, initiator1);
             TokenEntity myEntity2 = CreateValidTokenEntity(obo2, initiator1);
-            TokenInMemRepository ut = new TokenInMemRepository();
             try
             {
                 ut.Update(myEntity1);
@@ -239,7 +233,6 @@ namespace TokenServiceTest.Repository
         {
             return new TokenEntity(obo, initiator)
             {
-                Version = "1.0",
                 ProtectedUrl = "http://www.foo.com",
                 JwtUniqueIdentifier = "my-unique-identifier",
             };

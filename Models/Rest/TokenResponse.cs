@@ -19,12 +19,13 @@ namespace TokenService.Model.Rest
         public TokenResponse(List<TokenResponseMessage> messages)
         {
             Messages = new List<IResponseMessage>(messages);
+            Version = "1.0";
         }
 
         /// <summary>
         /// Primarily exists to support throwing exceptions with empty response or for unit testing.
         /// </summary>
-        public TokenResponse() : this( new List<TokenResponseMessage>())
+        public TokenResponse() : this(new List<TokenResponseMessage>())
         {
 
         }
@@ -33,7 +34,7 @@ namespace TokenService.Model.Rest
         /// only a version of "1.0" is currently supported
         /// </summary>
         [JsonProperty(PropertyName = "version", Required = Required.Always)]
-        public string Version { get; set; } = "1.0";
+        public string Version { get; set; }
 
         /// <summary>
         /// Diagnostic messages

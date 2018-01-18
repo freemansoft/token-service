@@ -33,8 +33,8 @@ namespace TokenServiceTest
             TokenIdentity obo = new TokenIdentity(null, "testid");
             TokenCreateRequest request = new TokenCreateRequest(obo)
             {
+                MaxUsageCount = 1,
                 ProtectedUrl = bogusTestUrl,
-                Version = "1.0",
                 Context = JObject.Parse(@"{ ""x"":""value""}"),
             };
             return request;
@@ -46,7 +46,6 @@ namespace TokenServiceTest
             // should we create a constructor in TokenValidateRequeste for this since there are so few properties
             TokenValidateRequest ourValidateRequest = new TokenValidateRequest()
             {
-                Version = "1.0",
                 JwtToken = jwtToken,
                 ProtectedUrl = protectedUrl
             };

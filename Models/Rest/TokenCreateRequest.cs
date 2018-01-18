@@ -11,16 +11,27 @@ namespace TokenService.Model.Rest
     /// </summary>
     public class TokenCreateRequest : IDataVersion, IValidatableObject
     {
+        public TokenCreateRequest() : this(null)
+        {
+
+        }
+
         /// <summary>
         /// This constructor is required so that the JSON serializer knows which concreate class to use for a proprty declared as an interface
         /// <a href="https://stackoverflow.com/questions/5780888/casting-interfaces-for-deserialization-in-json-net">from stackoverflow</a>
-        /// Another option is to use a converter
+        /// Another option is to use a converter.
+        /// <para></para>
+        /// Set only some default properties. Should we set none and force all to be set with no defaults?
         /// </summary>
         /// <param name="onBehalfOf"></param>
         [JsonConstructor]
         public TokenCreateRequest(TokenIdentity onBehalfOf)
         {
             this.OnBehalfOf = onBehalfOf;
+            Version = "1.0";
+            MaxUsageCount = 1;
+            EffectiveTime = DateTime.Now;
+            ExpirationIntervalSeconds = int.MaxValue;
         }
 
         /// <summary>
@@ -49,24 +60,24 @@ namespace TokenService.Model.Rest
         /// </summary>
         [Range(1, int.MaxValue)]
         [JsonProperty(PropertyName = "maxUsageCount")]
-        public int MaxUsageCount { get; set; } = 1;
+        public int MaxUsageCount { get; set; }
 
         /// <summary>
-        /// How long a token is valid.  
+        /// How long a token is valid. Range 0..MaxValue 
         /// TokenService calculates expiration date/time adding this to DateTime.Now;
-        /// The default is 300 seconds so can be marked "Required"
+        /// The default is int.MaxValue seconds so can be marked "Required"
         /// </summary>
         [Required]
         [Range(0, int.MaxValue)]
         [JsonProperty(PropertyName = "expirationIntervalSeconds")]
-        public int ExpirationIntervalSeconds { get; set; } = 300;
+        public int ExpirationIntervalSeconds { get; set; }
         /// <summary>
         /// When the token is initially valid. Defaults to "Now" so can be marked "Required"
         /// The JWT <i>nbf</i>
         /// </summary>
         [Required]
         [JsonProperty(PropertyName = "effectiveTime")]
-        public DateTime EffectiveTime { get; set; } = DateTime.Now;
+        public DateTime EffectiveTime { get; set; }
         /// <summary>
         /// Arbitrary valid json that acts as a shared context between token initiator and the validator.
         /// </summary>

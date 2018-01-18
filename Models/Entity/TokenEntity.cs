@@ -35,10 +35,11 @@ namespace TokenService.Model.Entity
                 this.ConsumedBy = consumedBy;
             }
             Version = "1.0";
-            ExpirationIntervalSec = 300;
+            ExpirationIntervalSec = int.MaxValue;
+            // default Initiation and EffectiveTime to now
             InitiationTime = DateTime.Now;
             EffectiveTime = InitiationTime;
-            ExpirationTime = InitiationTime.AddSeconds(ExpirationIntervalSec);
+            ExpirationTime = EffectiveTime.AddSeconds(ExpirationIntervalSec);
             CurrentUseCount = 0;
             MaxUseCount = int.MaxValue;
 
@@ -122,25 +123,25 @@ namespace TokenService.Model.Entity
         public int CurrentUseCount { get; set; }
         /// <summary>
         /// Length of time this token is valid.  Added to the initiation time
-        /// Default is 300 seconds
+        /// Default is int.MaxValue seconds
         /// </summary>
         [JsonProperty(PropertyName = "expirationIntervalSec", Required = Required.Always)]
         public int ExpirationIntervalSec { get; set; }
         /// <summary>
-        /// The time this token was created. Used to create expiration time
+        /// The time this token was created. Used to create default Effective time
         /// The JWT <i>iat</i>
         /// </summary>
         [JsonProperty(PropertyName = "initiationTime", Required = Required.Always)]
         public DateTime InitiationTime { get; set; }
         /// <summary>
         /// The expiration time for this token. Calculated using initiationTime + expirationIntervalSec
-        /// Default is now + 300 seconds
+        /// Default is EffectiveTime + int.MaxValue seconds
         /// The JWT <i>exp</i>
         /// </summary>
         [JsonProperty(PropertyName = "expirationTime", Required = Required.Always)]
         public DateTime ExpirationTime { get; set; }
         /// <summary>
-        /// When the token can first be used
+        /// When the token can first be used. Defaults to InitiationTime
         /// The JWT <i>nbf</i>
         /// </summary>
         [JsonProperty(PropertyName = "effectiveTime", Required = Required.Always)]

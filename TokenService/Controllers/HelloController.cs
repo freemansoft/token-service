@@ -38,7 +38,6 @@ namespace TokenService.Controllers
             });
             return Ok(new TokenResponse(messages)
             {
-                Version = "1.0",
             });
         }
 

@@ -10,7 +10,7 @@ using TokenService.Service;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace TokenServiceTest
+namespace TokenServiceTest.Service
 {
     public class TokenOperationsServiceTest
     {
@@ -19,6 +19,7 @@ namespace TokenServiceTest
         /// </summary>
         private readonly ITestOutputHelper _output;
 
+        private ILogger<TokenInMemRepository> repositoryLogger;
         private TokenInMemRepository inMemoryRepo;
         private ILogger<TokenOperationsService> serviceLogger;
         private TokenOperationsService serviceUnderTest;
@@ -30,7 +31,8 @@ namespace TokenServiceTest
         {
             this._output = output;
             serviceLogger = Mock.Of<ILogger<TokenOperationsService>>();
-            inMemoryRepo = new TokenInMemRepository();
+            repositoryLogger = Mock.Of<ILogger<TokenInMemRepository>>();
+            inMemoryRepo = new TokenInMemRepository(repositoryLogger);
             serviceUnderTest = new TokenOperationsService(serviceLogger, inMemoryRepo, ttu.BuildCryptographySettings());
 
         }
@@ -106,7 +108,7 @@ namespace TokenServiceTest
             }
             catch (BadArgumentException e)
             {
-                // should validate all the properties called out
+                // TODO should assert all the properties called out
                 Assert.NotNull(e.ServiceResponse);
                 _output.WriteLine("validation messages included " + e.ServiceResponse);
             }
@@ -223,10 +225,16 @@ namespace TokenServiceTest
         }
 
         /// <summary>
-        /// don't have anegative validation test mostly because ValidateEncodedJwt() does all the heavy lifting
+        /// <list type="number">
+        /// <item>
+        ///     <description>Make sure we can pass validation.</description></item>
+        /// <item>
+        ///     <description>Then fail validation on usage count exceeded</description></item>
+        /// </list>
+        /// Could be simplified by testing ValidateExpirationPolicy() directly
         /// </summary>
         [Fact]
-        public void ValidateTokenHappy()
+        public void ValidateTokenCountExceeded()
         {
             TokenCreateRequest request = ttu.BuildTokenCreateRequest();
             TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
@@ -238,14 +246,84 @@ namespace TokenServiceTest
             TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedUrl);
             try
             {
-                // test ValidateToken happy path
+                // first one should succeed
                 TokenValidateResponse response = serviceUnderTest.ValidateToken(validateThis);
-                // jam a context validation into this test also. probably should be broken out into its own test in the future
+                // Lets jam a context validation into this test also. probably should be broken out into its own test in the future
                 Assert.NotNull(response.Context);
             }
             catch (FailedException e)
             {
                 Assert.False(true, "Caught unexpected exception: " + e.Message + " " + e.ServiceResponse);
+            }
+            try
+            {
+                // usage count was set to one so should now fail
+                TokenValidateResponse response = serviceUnderTest.ValidateToken(validateThis);
+                // Lets jam a context validation into this test also. probably should be broken out into its own test in the future
+                Assert.False(true, "Did not catch exception when usage count exceeded");
+            }
+            catch (FailedException e)
+            {
+                _output.WriteLine("Caught expected exception: " + e.Message + " " + e.ServiceResponse);
+            }
+        }
+
+        /// <summary>
+        /// Fail because token expired.
+        /// Could be simplified by testing ValidateExpirationPolicy() directly
+        /// </summary>
+        [Fact]
+        public void ValidateTokenTimeExpired()
+        {
+            TokenCreateRequest request = ttu.BuildTokenCreateRequest();
+            // make effective and expiration time in the past
+            request.EffectiveTime = DateTime.Now.AddDays(-1);
+            request.ExpirationIntervalSeconds = 0;
+
+            TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
+            // create validation request from the data used to create the token
+            TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedUrl);
+            try
+            {
+                // should fail as expired
+                TokenValidateResponse response = serviceUnderTest.ValidateToken(validateThis);
+                Assert.False(true, "Did not catch exception when token expired");
+            }
+            catch (FailedException e)
+            {
+                // TODO should validate the message or something...
+                _output.WriteLine("Caught expected exception: " + e.Message + " " + e.ServiceResponse);
+            }
+        }
+
+        /// <summary>
+        /// Fail because token expired.
+        /// Could be simplified by testing ValidateExpirationPolicy() directly
+        /// </summary>
+        [Fact]
+        public void ValidateTokenNotEffective()
+        {
+            TokenCreateRequest request = ttu.BuildTokenCreateRequest();
+            // make effective and expiration time in the past
+            request.EffectiveTime = DateTime.Now.AddDays(+20);
+
+            TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
+            // create validation request from the data used to create the token
+            TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedUrl);
+            try
+            {
+                // should fail as expired
+                TokenValidateResponse response = serviceUnderTest.ValidateToken(validateThis);
+                Assert.False(true, "Did not catch exception when token not yet effective");
+            }
+            catch (FailedException e)
+            {
+                // TODO should validate the message or something...
+                _output.WriteLine("Caught expected exception: " + e.Message + " " + e.ServiceResponse);
             }
         }
 
@@ -277,6 +355,7 @@ namespace TokenServiceTest
             catch (FailedException e)
             {
                 // TODO validate the actual exception
+                _output.WriteLine("Caught expected exception: " + e.Message + " " + e.ServiceResponse);
             }
         }
 
@@ -297,7 +376,7 @@ namespace TokenServiceTest
             }
             catch (FailedException e)
             {
-
+                _output.WriteLine("Caught expected exception: " + e.Message + " " + e.ServiceResponse);
             }
         }
 

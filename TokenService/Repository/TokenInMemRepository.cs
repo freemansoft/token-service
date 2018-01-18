@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using TokenService.Exception;
 using TokenService.Model.Entity;
@@ -11,7 +12,22 @@ namespace TokenService.Repository
     /// </summary>
     public class TokenInMemRepository : IRepository<TokenEntity>
     {
+
+        /// <summary>
+        /// injected
+        /// </summary>
+        private readonly ILogger<TokenInMemRepository> _logger;
+
         IDictionary<string, TokenEntity> fakeStore = new Dictionary<string, TokenEntity>();
+
+        /// <summary>
+        /// Constructor with aut-injected logger
+        /// </summary>
+        /// <param name="logger"></param>
+        public TokenInMemRepository(ILogger<TokenInMemRepository> logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         /// Create a document with the identifier in the entity.
@@ -29,6 +45,7 @@ namespace TokenService.Repository
                 throw new BadArgumentException("Can't create token without primary key", new TokenResponse());
             }
             fakeStore.Add(entity.Id, entity);
+            _logger.LogDebug("Token store created : {0}", entity.Id);
         }
         /// <summary>
         /// Delete a Document
@@ -45,6 +62,7 @@ namespace TokenService.Repository
                 throw new BadArgumentException("Can't create token without primary key", new TokenResponse());
             }
             fakeStore.Remove(entity.Id);
+            _logger.LogDebug("Token store deleted : {0}", entity.Id);
         }
         /// <summary>
         /// Get
@@ -59,10 +77,12 @@ namespace TokenService.Repository
             }
             if (fakeStore.ContainsKey(id))
             {
+                _logger.LogDebug("Token store found : {0}", id);
                 return fakeStore[id];
             }
             else
             {
+                _logger.LogDebug("Token store not found : {0}", id);
                 return null;
             }
         }
@@ -86,6 +106,7 @@ namespace TokenService.Repository
                 fakeStore.Remove(entity.Id);
             }
             fakeStore.Add(entity.Id, entity);
+            _logger.LogDebug("Token store updated : {0}", entity.Id);
         }
     }
 }

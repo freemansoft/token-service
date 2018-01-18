@@ -7,6 +7,15 @@ namespace TokenService.Model.Rest
     public class TokenValidateRequest : IDataVersion, IValidatableObject
     {
         /// <summary>
+        /// Zero argument constructor.
+        /// Set only the version number. All other properties must be set by creator!
+        /// </summary>
+        public TokenValidateRequest()
+        {
+            Version = "1.0";
+        }
+
+        /// <summary>
         /// only a version of "1.0" is currently supported
         /// </summary>
         [Required]

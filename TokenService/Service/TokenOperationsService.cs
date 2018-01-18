@@ -80,7 +80,6 @@ namespace TokenService.Service
             TokenCreateResponse response = new TokenCreateResponse()
             {
                 JwtToken = newJwt,
-                Version = "1.0",
             };
             return response;
         }
@@ -107,10 +106,11 @@ namespace TokenService.Service
             // assuming we validated and found it
             TokenValidateResponse response = new TokenValidateResponse()
             {
-                Version = "1.0",
                 Context = jwtTokenEntity.Context
             };
-
+            // save the updated usage count and any audit information
+            _logger.LogDebug("Saving updated entity {0}", postValidationEntity);
+            _repository.Update(postValidationEntity);
             return response;
         }
 
@@ -128,14 +128,14 @@ namespace TokenService.Service
             TokenEntity entity = new TokenEntity(new TokenIdentityEntity(request.OnBehalfOf.ProviderName, request.OnBehalfOf.UserName), null)
             {
                 Context = request.Context,
+                MaxUseCount = request.MaxUsageCount,
                 EffectiveTime = request.EffectiveTime,
                 ExpirationIntervalSec = request.ExpirationIntervalSeconds,
-                ExpirationTime = now.AddSeconds(request.ExpirationIntervalSeconds),
+                ExpirationTime = request.EffectiveTime.AddSeconds(request.ExpirationIntervalSeconds),
                 InitiationTime = now,
                 JwtUniqueIdentifier = Guid.NewGuid().ToString(),
                 JwtSecret = SecretKey(),
                 ProtectedUrl = request.ProtectedUrl,
-                Version = "1.0",
             };
             return entity;
         }
@@ -195,9 +195,9 @@ namespace TokenService.Service
             if (!jwtTokenEntity.Id.Equals(jwtToken.Id))
             {
                 _logger.LogWarning(
-                    "JWT Token ID {0} does not match store token ID {1}", jwtToken.Id, jwtTokenEntity.Id);
+                    "JWT TokenId={0} does not match stored TokenId={1}", jwtToken.Id, jwtTokenEntity.Id);
                 throw new FailedException(String.Format(
-                    "JWT Token ID {0} does not match store token ID {1}", jwtToken.Id, jwtTokenEntity.Id));
+                    "JWT TokenId={0} does not match stored TokenId={1}", jwtToken.Id, jwtTokenEntity.Id));
             }
             // Validate the requested URL against the URL the token was created for
             // Note that this is a SOFT match anchored at the start
@@ -207,9 +207,9 @@ namespace TokenService.Service
             if (!urlRegexResults.Success)
             {
                 _logger.LogWarning(
-                    "Requested url {0} does not match store token protected url {1}", targetUrl, jwtTokenEntity.ProtectedUrl);
+                    "JWT TokenId={0} RequestedUrl='{1}' does not match store token ProtectedUrl='{2}'", jwtToken.Id, targetUrl, jwtTokenEntity.ProtectedUrl);
                 throw new FailedException(String.Format(
-                    "Requested url {0} does not match store token protected url {1}", targetUrl, jwtTokenEntity.ProtectedUrl));
+                    "JWT TokenId={0} RequestedUrl='{1}' does not match store token ProtectedUrl='{2}'", jwtToken.Id, targetUrl, jwtTokenEntity.ProtectedUrl));
             }
             // now validate the signature using keys
             // TODO add signature validation
@@ -218,8 +218,11 @@ namespace TokenService.Service
         }
 
         /// <summary>
+        /// Verifies time and usage count limits.
+        /// <para></para>
         /// This thows an exception on validation failure. 
         /// Should it return something instead?
+        /// <para></para>
         /// Mutates the passed in TokenEntity!  This is a bad idea.
         /// </summary>
         /// <param name="jwtTokenEntity">token retrieved from the token store</param>
@@ -227,28 +230,34 @@ namespace TokenService.Service
         internal TokenEntity ValidateExpirationPolicy(TokenEntity jwtTokenEntity)
         {
             DateTime rightNow = DateTime.Now;
-            if (jwtTokenEntity.MaxUseCount > jwtTokenEntity.CurrentUseCount + 1)
+            // Comparison returns <1 if rightNow is prior to jwtTokenEntity.EffectiveTime
+            // Comparison returns >1 if rightNow is later than jwtTokenEntity.EffectiveTime
+            if (DateTime.Compare(rightNow, jwtTokenEntity.EffectiveTime) < 0)
             {
-                // under max use count
-                jwtTokenEntity.CurrentUseCount++;
+                // token not yet effective
+                throw new FailedException("JWT TokenId=" + jwtTokenEntity.Id + " not yet effective now=" + rightNow + " EffectiveTime=" + jwtTokenEntity.ExpirationTime);
+            }
+
+            if (jwtTokenEntity.MaxUseCount <= jwtTokenEntity.CurrentUseCount)
+            {
+                // one more puts us over the limit
+                throw new FailedException("JWT TokenId=" + jwtTokenEntity.Id + " exceeded MaxUseCount=" + jwtTokenEntity.MaxUseCount);
             }
             else
             {
-                throw new FailedException("Token exceeded max use count " + jwtTokenEntity.MaxUseCount);
+                // under max use count - assume entity will get saved later
+                jwtTokenEntity.CurrentUseCount++;
+                _logger.LogDebug("JWT TokenId={0} CurrentUseCount={1} MaxUseCount={2}", jwtTokenEntity.Id, jwtTokenEntity.CurrentUseCount, jwtTokenEntity.MaxUseCount);
             }
 
             // Comparison returns <1 if rightNow is prior to jwtTokenEntity.ExpirationTime
             // Comparison returns >1 if rightNow is later than jwtTokenEntity.ExpirationTime
-            if (DateTime.Compare(rightNow, jwtTokenEntity.ExpirationTime) < 0)
+            if (DateTime.Compare(rightNow, jwtTokenEntity.ExpirationTime) > 0)
             {
-                // time limit exceeded
-                _logger.LogDebug("Token validated ", jwtTokenEntity.Id);
+                // token expired
+                throw new FailedException("JWT TokenId=" + jwtTokenEntity.Id + " expired now=" + rightNow + " ExpirationTime=" + jwtTokenEntity.ExpirationTime);
             }
-            else
-            {
-                throw new FailedException("Token expired failed now: " + rightNow + " vs expirationTime: " + jwtTokenEntity.ExpirationTime);
-            }
-            // todo make TokenEntity immutable
+            // TODO make TokenEntity immutable and return copy
             return jwtTokenEntity;
         }
 
