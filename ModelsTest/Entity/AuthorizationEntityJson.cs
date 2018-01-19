@@ -3,7 +3,7 @@
     class AuthorizationEntityJson
     {
         public static string AuthorizationEntityWithConditions = @"{
-            ""version"" : ""1.0"",
+            ""modelVersion"" : ""1.0"",
             ""providerName"": ""OAuth2"",
             ""userName"": ""testuser"",
             ""conditions"": [

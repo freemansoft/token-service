@@ -61,7 +61,7 @@ namespace TokenServiceTest.Service
         public void CreateTokenForceValidationError()
         {
             TokenCreateRequest request = ttu.BuildTokenCreateRequest();
-            request.Version = null;
+            request.ModelVersion = null;
             try
             {
                 TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);

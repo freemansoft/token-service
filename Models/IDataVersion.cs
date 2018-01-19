@@ -10,7 +10,7 @@ namespace TokenService.Model
         /// <summary>
         /// only a version of "1.0" is currently supported
         /// </summary>
-        [JsonProperty(PropertyName = "version")]
-        string Version { get; set; }
+        [JsonProperty(PropertyName = "modelVersion")]
+        string ModelVersion { get; set; }
     }
 }

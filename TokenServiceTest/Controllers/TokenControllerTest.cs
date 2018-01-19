@@ -46,7 +46,7 @@ namespace TokenServiceTest.Controllers
             CreatedResult result = controller.Create(request) as CreatedResult;
             TokenCreateResponse response = result.Value as TokenCreateResponse;
             Assert.NotNull(response);
-            Assert.Equal("1.0", response.Version);
+            Assert.Equal("1.0", response.ModelVersion);
             Assert.NotEmpty(response.JwtToken);
             // shouldn't be any messages
             Assert.Equal(0, response.Messages.Count);

@@ -34,7 +34,7 @@ namespace TokenService.Model.Entity
             {
                 this.ConsumedBy = consumedBy;
             }
-            Version = "1.0";
+            ModelVersion = "1.0";
             ExpirationIntervalSec = int.MaxValue;
             // default Initiation and EffectiveTime to now
             InitiationTime = DateTime.Now;
@@ -66,8 +66,8 @@ namespace TokenService.Model.Entity
         /// <summary>
         /// only a version of "1.0" is currently supported
         /// </summary>
-        [JsonProperty(PropertyName = "version", Required = Required.Always)]
-        public string Version { get; set; }
+        [JsonProperty(PropertyName = "modelVersion", Required = Required.Always)]
+        public string ModelVersion { get; set; }
         /// <summary>
         /// url protected by this token.
         /// Matched with Regex "^"+ProtectedUrl

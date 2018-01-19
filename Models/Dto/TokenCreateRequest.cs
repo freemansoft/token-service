@@ -28,7 +28,7 @@ namespace TokenService.Model.Dto
         public TokenCreateRequest(TokenIdentity onBehalfOf)
         {
             this.OnBehalfOf = onBehalfOf;
-            Version = "1.0";
+            ModelVersion = "1.0";
             MaxUsageCount = 1;
             EffectiveTime = DateTime.Now;
             ExpirationIntervalSeconds = int.MaxValue;
@@ -38,8 +38,8 @@ namespace TokenService.Model.Dto
         /// only a version of "1.0" is currently supported
         /// </summary>
         [Required]
-        [JsonProperty(PropertyName = "version", Required = Required.Always)]
-        public string Version { get; set; }
+        [JsonProperty(PropertyName = "modelVersion", Required = Required.Always)]
+        public string ModelVersion { get; set; }
         /// <summary>
         /// URL that this token is issued for.  The protected resource. 
         /// Matched with Regex "^"+ProtectedUrl

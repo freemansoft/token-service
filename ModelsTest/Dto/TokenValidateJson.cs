@@ -3,19 +3,19 @@
     class TokenValidateJson
     {
         public static string TokenValidateRequest = @"{
-            ""version"" : ""1.0"",
+            ""modelVersion"" : ""1.0"",
             ""jwtToken"" : ""=jlsdfjkldfdlkd"",
             ""protectedUrl"" : ""http://www.foobar.com""
         }";
 
         public static string TokenValidateResponseContextNone = @"{
-            ""version"" : ""1.0"",
+            ""modelVersion"" : ""1.0"",
             ""messages"" : [
             ],
         }";
 
         public static string TokenValidateResponseMessages = @"{
-            ""version"" : ""1.0"",
+            ""modelVersion"" : ""1.0"",
             ""messages"" : [
                 {
                     ""id"" : ""DOOM001"",
@@ -29,14 +29,14 @@
         }";
 
         public static string TokenValidateResponseContextProperty = @"{
-            ""version"" : ""1.0"",
+            ""modelVersion"" : ""1.0"",
             ""messages"" : [
             ],
             ""context"" : ""singleProp""
         }";
 
         public static string TokenValidateResponseContextObject = @"{
-            ""version"" : ""1.0"",
+            ""modelVersion"" : ""1.0"",
             ""messages"" : [
             ],
             ""context"" : {

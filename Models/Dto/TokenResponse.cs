@@ -19,7 +19,7 @@ namespace TokenService.Model.Dto
         public TokenResponse(List<TokenResponseMessage> messages)
         {
             Messages = new List<IResponseMessage>(messages);
-            Version = "1.0";
+            ModelVersion = "1.0";
         }
 
         /// <summary>
@@ -33,8 +33,8 @@ namespace TokenService.Model.Dto
         /// <summary>
         /// only a version of "1.0" is currently supported
         /// </summary>
-        [JsonProperty(PropertyName = "version", Required = Required.Always)]
-        public string Version { get; set; }
+        [JsonProperty(PropertyName = "modelVersion", Required = Required.Always)]
+        public string ModelVersion { get; set; }
 
         /// <summary>
         /// Diagnostic messages

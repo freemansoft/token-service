@@ -13,14 +13,14 @@ namespace TokenService.Model.Entity
         /// </summary>
         public AuthorizationEntity()
         {
-            Version = "1.0";
+            ModelVersion = "1.0";
         }
 
         /// <summary>
         /// only a version of "1.0" is currently supported
         /// </summary>
-        [JsonProperty(PropertyName = "version")]
-        public string Version { get; set; }
+        [JsonProperty(PropertyName = "modelVersion")]
+        public string ModelVersion { get; set; }
 
         /// <summary>
         /// Identity provider. should configure JSON serializaton for providerName

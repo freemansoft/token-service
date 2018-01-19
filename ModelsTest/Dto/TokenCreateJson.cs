@@ -3,7 +3,7 @@
     class TokenCreateJson
     {
         static string TokenCreateBodyWithoutContextc = @"
-            ""version"" : ""1.0"",
+            ""modelVersion"" : ""1.0"",
             ""protectedUrl"" : ""http://www.google.com"",
             ""onBehalfOf"":
             {
@@ -40,14 +40,14 @@
         public static string CreateTokenRequestContextArray = "{\n" + TokenCreateBodyWithoutContextc + ArrayContext + "\n}";
 
         public static string CreateTokenResponseMessageEmpty = @"{
-            ""version"" : ""1.0"",
+            ""modelVersion"" : ""1.0"",
             ""jwtToken"" : ""=asdfasdf"",
             ""messages"" : [
             ]
         }";
 
         public static string CreateTokenResponseMessageSingle = @"{
-            ""version"" : ""1.0"",
+            ""modelVersion"" : ""1.0"",
             ""jwtToken"" : ""=asdfasdf"",
             ""messages"" : [
                 {

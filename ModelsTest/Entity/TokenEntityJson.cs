@@ -3,7 +3,7 @@
     class TokenEntityJson
     {
         static string TokenEntityBodyWithoutContext = @"
-            ""version"" : ""1.0"",
+            ""modelVersion"" : ""1.0"",
             ""protectedUrl"" : ""http://www.google.com"",
             ""jwtToken"" : ""=xdlkjfdkjdf"",
             ""jwtUniqueIdentifier"" : ""ADFG-ASDKL-SCFF"",

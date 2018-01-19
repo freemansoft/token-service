@@ -12,15 +12,15 @@ namespace TokenService.Model.Dto
         /// </summary>
         public TokenValidateRequest()
         {
-            Version = "1.0";
+            ModelVersion = "1.0";
         }
 
         /// <summary>
         /// only a version of "1.0" is currently supported
         /// </summary>
         [Required]
-        [JsonProperty(PropertyName = "version")]
-        public string Version { get; set; }
+        [JsonProperty(PropertyName = "modelVersion")]
+        public string ModelVersion { get; set; }
 
         /// <summary>
         /// The jwt tokent to be added to URL or stuffed in headers when using external entity uses token
