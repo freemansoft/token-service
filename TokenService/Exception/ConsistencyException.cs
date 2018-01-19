@@ -3,7 +3,7 @@
 namespace TokenService.Exception
 {
     /// <summary>
-    /// There is some error in the token configuration itself or signature mismatch
+    /// There is some error in the token configuration itself. expected values did not align
     /// </summary>
     public class ConsistencyException : TokenServiceException
     {

@@ -3,7 +3,7 @@
 namespace TokenService.Exception
 {
     /// <summary>
-    /// 
+    /// Some internal component was misconfigured or auto injected object not injected
     /// </summary>
     public class ConfigurationException : TokenServiceException
     {

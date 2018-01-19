@@ -3,7 +3,7 @@
 namespace TokenService.Exception
 {
     /// <summary>
-    /// 
+    /// Failed Model Validation or Invalid token property while attempting to update store.
     /// </summary>
     public class BadArgumentException : TokenServiceException
     {

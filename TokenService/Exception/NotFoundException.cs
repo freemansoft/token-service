@@ -3,7 +3,7 @@
 namespace TokenService.Exception
 {
     /// <summary>
-    /// 
+    /// Object (Token) not found
     /// </summary>
     public class NotFoundException : TokenServiceException
     {
