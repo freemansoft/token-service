@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using TokenService.Model.Rest;
+using TokenService.Model.Dto;
 
 namespace TokenService.Controllers
 {

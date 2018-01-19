@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using TokenService.Model.Rest;
+using TokenService.Model.Dto;
 using Xunit;
 
-namespace TokenService.ModelTest.Rest
+namespace TokenService.ModelTest.Dto
 {
     public class TokenResponseTest
     {

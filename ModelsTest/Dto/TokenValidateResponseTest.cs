@@ -1,43 +1,49 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using TokenService.Model.Rest;
+using TokenService.Model.Dto;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace TokenService.ModelTest.Rest
+namespace TokenService.ModelTest.Dto
 {
-    public class TokenCreateRequestTest
+    public class TokenValidateResponseTest
     {
         private readonly ITestOutputHelper output;
 
-        public TokenCreateRequestTest(ITestOutputHelper output)
+        public TokenValidateResponseTest(ITestOutputHelper output)
         {
             this.output = output;
 
         }
 
         [Fact]
-        public void SerializeContextEmpty()
+        public void SerializeContextNone()
         {
-            DeserializeSerializeCompare(TokenCreateJson.CreateTokenRequestContextEmpty);
+            DeserializeSerializeCompare(TokenValidateJson.TokenValidateResponseContextNone);
+        }
+
+        [Fact]
+        public void SerializeWithMessages()
+        {
+            DeserializeSerializeCompare(TokenValidateJson.TokenValidateResponseMessages);
         }
 
         [Fact]
         public void SerializeContextProperty()
         {
-            DeserializeSerializeCompare(TokenCreateJson.CreateTokenRequestContextProperty);
+            DeserializeSerializeCompare(TokenValidateJson.TokenValidateResponseContextProperty);
         }
 
         [Fact]
-        public void SerializeContextArray()
+        public void SerializeContextObject()
         {
-            DeserializeSerializeCompare(TokenCreateJson.CreateTokenRequestContextArray);
+            DeserializeSerializeCompare(TokenValidateJson.TokenValidateResponseContextObject);
         }
 
         private void DeserializeSerializeCompare(string jsonRep)
         {
             // convert the JSON to objects.  Convert the objects to JSON.
-            TokenCreateRequest hydrated = JsonConvert.DeserializeObject<TokenCreateRequest>(jsonRep);
+            TokenValidateResponse hydrated = JsonConvert.DeserializeObject<TokenValidateResponse>(jsonRep);
             Assert.NotNull(hydrated);
             output.WriteLine("Original=" + jsonRep);
             string serialized = JsonConvert.SerializeObject(hydrated, Formatting.Indented);

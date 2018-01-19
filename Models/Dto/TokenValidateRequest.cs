@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace TokenService.Model.Rest
+namespace TokenService.Model.Dto
 {
     public class TokenValidateRequest : IDataVersion, IValidatableObject
     {

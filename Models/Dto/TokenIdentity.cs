@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace TokenService.Model.Rest
+namespace TokenService.Model.Dto
 {
     /// <summary>
     /// Used to identify a user, often the initiator, the obo user or the validator

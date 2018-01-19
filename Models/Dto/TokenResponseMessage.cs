@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace TokenService.Model.Rest
+namespace TokenService.Model.Dto
 {
     public class TokenResponseMessage : IResponseMessage
     {

@@ -1,4 +1,4 @@
-﻿using TokenService.Model.Rest;
+﻿using TokenService.Model.Dto;
 
 namespace TokenService.Exception
 {

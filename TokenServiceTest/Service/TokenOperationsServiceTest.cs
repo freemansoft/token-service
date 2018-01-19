@@ -4,7 +4,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using TokenService.Exception;
 using TokenService.Model.Entity;
-using TokenService.Model.Rest;
+using TokenService.Model.Dto;
 using TokenService.Repository;
 using TokenService.Service;
 using Xunit;
@@ -196,11 +196,12 @@ namespace TokenServiceTest.Service
 
         /// <summary>
         /// feature not yet implemented
+        /// This test will validate that the encryption signature comparison is working correctly
         /// </summary>
         [Fact(Skip = "not yet implemented")] // Xunit 2.x https://xunit.github.io/docs/comparisons.html
         public void ValidateEncodedJwtBadSignature()
         {
-
+            // ValidateTokenSignature(string signedToken, TokenEntity jwtToken)
         }
 
         [Fact]

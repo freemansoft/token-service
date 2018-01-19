@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace TokenService.Model.Rest
+namespace TokenService.Model.Dto
 {
     /// <summary>
     /// The root class for token creation requests.

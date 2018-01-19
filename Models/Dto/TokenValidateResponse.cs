@@ -1,12 +1,10 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-namespace TokenService.Model.Rest
+namespace TokenService.Model.Dto
 {
-    /// <summary>
-    /// The response object for TokenCreateRequest
-    /// </summary>
-    public class TokenCreateResponse : TokenResponse
+    public class TokenValidateResponse : TokenResponse
     {
         /// <summary>
         /// This constructor is required so that the JSON serializer knows which concreate class to use for a proprty declared as an interface
@@ -15,23 +13,23 @@ namespace TokenService.Model.Rest
         /// </summary>
         /// <param name="messages"></param>
         [JsonConstructor]
-        public TokenCreateResponse(List<TokenResponseMessage> messages) : base(messages)
+        public TokenValidateResponse(List<TokenResponseMessage> messages) : base(messages)
         {
         }
 
         /// <summary>
         /// Primarily exists to support throwing exceptions with empty response or for unit testing.
         /// </summary>
-        public TokenCreateResponse() : this(new List<TokenResponseMessage>())
+        public TokenValidateResponse() : this(new List<TokenResponseMessage>())
         {
 
         }
 
         /// <summary>
-        /// The jwt token to be added to URL or stuffed in headers when using external entity uses token
+        /// Arbitrary valid json that acts as a shared context between token initiator and the validator.
         /// </summary>
-        [JsonProperty(PropertyName = "jwtToken")]
-        public string JwtToken { get; set; }
+        [JsonProperty(PropertyName = "context", NullValueHandling = NullValueHandling.Ignore)]
+        public JToken Context { get; set; }
 
         public override string ToString() => JsonConvert.SerializeObject(this);
 

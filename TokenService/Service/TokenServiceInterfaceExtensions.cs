@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TokenService.Exception;
-using TokenService.Model.Rest;
+using TokenService.Model.Dto;
 
 namespace TokenService.Service
 {

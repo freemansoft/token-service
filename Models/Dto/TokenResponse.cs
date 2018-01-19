@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace TokenService.Model.Rest
+namespace TokenService.Model.Dto
 {
     /// <summary>
     /// Standard response.

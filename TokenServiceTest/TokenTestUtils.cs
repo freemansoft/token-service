@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System;
-using TokenService.Model.Rest;
+using TokenService.Model.Dto;
 using TokenService.Service;
 
 namespace TokenServiceTest

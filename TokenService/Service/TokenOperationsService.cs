@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using TokenService.Exception;
 using TokenService.Model.Entity;
-using TokenService.Model.Rest;
+using TokenService.Model.Dto;
 using TokenService.Repository;
 
 namespace TokenService.Service
@@ -100,6 +100,7 @@ namespace TokenService.Service
             // convert string to POCO
             JwtSecurityToken jwtToken = new JwtSecurityToken(jwtEncodedString);
             TokenEntity jwtTokenEntity = _repository.GetById(jwtToken.Id);
+            ValidateTokenSignature(jwtEncodedString, jwtTokenEntity);
             // validate the basic token and the URL
             ValidateEncodedJwt(jwtToken, jwtTokenEntity, request.ProtectedUrl);
             TokenEntity postValidationEntity = ValidateExpirationPolicy(jwtTokenEntity);
@@ -181,6 +182,22 @@ namespace TokenService.Service
             return tokenString;
         }
 
+        /// <summary>
+        /// Validate the signing part of this
+        /// </summary>
+        /// <param name="signedToken"></param>
+        /// <param name="jwtToken"></param>
+        internal void ValidateTokenSignature(string signedToken, TokenEntity jwtToken)
+        {
+            // kind of a simple hack
+            string tokenFromEntity = CreateJwt(jwtToken);
+            if (!tokenFromEntity.Equals(signedToken))
+            {
+                throw new FailedException(String.Format(
+                    "JWT TokenId={0} CalculatedSignature={1} does not match ProvidedSignature={2}",
+                    jwtToken.Id, tokenFromEntity, signedToken));
+            }
+        }
 
         /// <summary>
         /// This thows an exception on validation failure. 
@@ -211,9 +228,6 @@ namespace TokenService.Service
                 throw new FailedException(String.Format(
                     "JWT TokenId={0} RequestedUrl='{1}' does not match store token ProtectedUrl='{2}'", jwtToken.Id, targetUrl, jwtTokenEntity.ProtectedUrl));
             }
-            // now validate the signature using keys
-            // TODO add signature validation
-
             // victory!
         }
 

@@ -1,16 +1,16 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using TokenService.Model.Rest;
+using TokenService.Model.Dto;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace TokenService.ModelTest.Rest
+namespace TokenService.ModelTest.Dto
 {
-    public class TokenCreateResponseTest
+    public class TokenValidateRequestTest
     {
         private readonly ITestOutputHelper output;
 
-        public TokenCreateResponseTest(ITestOutputHelper output)
+        public TokenValidateRequestTest(ITestOutputHelper output)
         {
             this.output = output;
 
@@ -19,19 +19,14 @@ namespace TokenService.ModelTest.Rest
         [Fact]
         public void SerializeContextEmpty()
         {
-            DeserializeSerializeCompare(TokenCreateJson.CreateTokenResponseMessageEmpty);
+            DeserializeSerializeCompare(TokenValidateJson.TokenValidateRequest);
         }
 
-        [Fact]
-        public void SerializeContextArray()
-        {
-            DeserializeSerializeCompare(TokenCreateJson.CreateTokenResponseMessageSingle);
-        }
 
         private void DeserializeSerializeCompare(string jsonRep)
         {
             // convert the JSON to objects.  Convert the objects to JSON.
-            TokenCreateResponse hydrated = JsonConvert.DeserializeObject<TokenCreateResponse>(jsonRep);
+            TokenValidateRequest hydrated = JsonConvert.DeserializeObject<TokenValidateRequest>(jsonRep);
             Assert.NotNull(hydrated);
             output.WriteLine("Original=" + jsonRep);
             string serialized = JsonConvert.SerializeObject(hydrated, Formatting.Indented);

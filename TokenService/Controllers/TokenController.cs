@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TokenService.Model.Rest;
+using TokenService.Model.Dto;
 using TokenService.Service;
 
 namespace TokenService.Controllers

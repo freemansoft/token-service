@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using TokenService.Exception;
 using TokenService.Model.Entity;
-using TokenService.Model.Rest;
+using TokenService.Model.Dto;
 
 namespace TokenService.Repository
 {

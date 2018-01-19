@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using TokenService.Controllers;
-using TokenService.Model.Rest;
+using TokenService.Model.Dto;
 using TokenService.Repository;
 using TokenService.Service;
 using Xunit;
