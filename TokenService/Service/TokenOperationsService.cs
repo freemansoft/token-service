@@ -8,8 +8,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.RegularExpressions;
 using TokenService.Exception;
-using TokenService.Model.Entity;
 using TokenService.Model.Dto;
+using TokenService.Model.Entity;
 using TokenService.Repository;
 
 namespace TokenService.Service
@@ -51,19 +51,20 @@ namespace TokenService.Service
         public TokenOperationsService(ILogger<TokenOperationsService> logger, IRepository<TokenEntity> repository, IOptions<CryptographySettings> cryptoSettings)
         {
 #pragma warning disable IDE0016 
-            if (logger == null) { throw new BadArgumentException("logger null when creating TokenCreationService"); }
-            if (repository == null) { throw new BadArgumentException("repository null when creating TokenCreationService"); }
+            if (logger == null) { throw new ConfigurationException("logger null when creating TokenCreationService"); }
+            if (repository == null) { throw new ConfigurationException("repository null when creating TokenCreationService"); }
 #pragma warning restore IDE0016 
-            if (cryptoSettings == null) { throw new BadArgumentException("cryptoSettings null when creating TokenCreationService"); }
-            if (cryptoSettings.Value.JwtSecret == null) { throw new BadArgumentException("cryptosettings is missing the JWT secret seed value"); }
+            if (cryptoSettings == null) { throw new ConfigurationException("cryptoSettings null when creating TokenCreationService"); }
+            if (cryptoSettings.Value.JwtSecret == null) { throw new ConfigurationException("cryptosettings is missing the JWT secret seed value"); }
             _logger = logger;
             _repository = repository;
             _cryptoSettings = cryptoSettings;
         }
 
         /// <summary>
-        /// Creates a token and returns it in the response. Throws an exception wrapping the response if there is an error.
-        /// BadArgumentException if the request is bad
+        /// Creates a token and returns it in the response. 
+        /// Throws an exception wrapping the response if there is an error.
+        /// Throws BadArgumentException if the request is bad
         /// FailedException if there was some other problem
         /// </summary>
         /// <param name="request"></param>
@@ -86,8 +87,9 @@ namespace TokenService.Service
 
         /// <summary>
         /// Validates the passed in token should be honored
-        /// Returns the response.  Throws an exception containing a response if it fails
-        /// BadArgumentException if the request is bad
+        /// Returns the response.  
+        /// Throws an exception containing a response if it fails
+        /// Throws BadArgumentException if the request is bad
         /// FailedException if there was some other problem
         /// </summary>
         /// <param name="request"></param>
@@ -100,6 +102,11 @@ namespace TokenService.Service
             // convert string to POCO
             JwtSecurityToken jwtToken = new JwtSecurityToken(jwtEncodedString);
             TokenEntity jwtTokenEntity = _repository.GetById(jwtToken.Id);
+            if (jwtTokenEntity == null)
+            {
+                throw new NotFoundException(String.Format(
+                    "JWT TokenId={0} Token not found", jwtToken.Id));
+            }
             ValidateTokenSignature(jwtEncodedString, jwtTokenEntity);
             // validate the basic token and the URL
             ValidateEncodedJwt(jwtToken, jwtTokenEntity, request.ProtectedUrl);
@@ -193,7 +200,7 @@ namespace TokenService.Service
             string tokenFromEntity = CreateJwt(jwtToken);
             if (!tokenFromEntity.Equals(signedToken))
             {
-                throw new FailedException(String.Format(
+                throw new ConsistencyException(String.Format(
                     "JWT TokenId={0} CalculatedSignature={1} does not match ProvidedSignature={2}",
                     jwtToken.Id, tokenFromEntity, signedToken));
             }
@@ -213,7 +220,7 @@ namespace TokenService.Service
             {
                 _logger.LogWarning(
                     "JWT TokenId={0} does not match stored TokenId={1}", jwtToken.Id, jwtTokenEntity.Id);
-                throw new FailedException(String.Format(
+                throw new ConsistencyException(String.Format(
                     "JWT TokenId={0} does not match stored TokenId={1}", jwtToken.Id, jwtTokenEntity.Id));
             }
             // Validate the requested URL against the URL the token was created for
@@ -225,7 +232,7 @@ namespace TokenService.Service
             {
                 _logger.LogWarning(
                     "JWT TokenId={0} RequestedUrl='{1}' does not match store token ProtectedUrl='{2}'", jwtToken.Id, targetUrl, jwtTokenEntity.ProtectedUrl);
-                throw new FailedException(String.Format(
+                throw new ViolationException(String.Format(
                     "JWT TokenId={0} RequestedUrl='{1}' does not match store token ProtectedUrl='{2}'", jwtToken.Id, targetUrl, jwtTokenEntity.ProtectedUrl));
             }
             // victory!
@@ -249,13 +256,13 @@ namespace TokenService.Service
             if (DateTime.Compare(rightNow, jwtTokenEntity.EffectiveTime) < 0)
             {
                 // token not yet effective
-                throw new FailedException("JWT TokenId=" + jwtTokenEntity.Id + " not yet effective now=" + rightNow + " EffectiveTime=" + jwtTokenEntity.ExpirationTime);
+                throw new ViolationException("JWT TokenId=" + jwtTokenEntity.Id + " not yet effective now=" + rightNow + " EffectiveTime=" + jwtTokenEntity.ExpirationTime);
             }
 
             if (jwtTokenEntity.MaxUseCount <= jwtTokenEntity.CurrentUseCount)
             {
                 // one more puts us over the limit
-                throw new FailedException("JWT TokenId=" + jwtTokenEntity.Id + " exceeded MaxUseCount=" + jwtTokenEntity.MaxUseCount);
+                throw new ViolationException("JWT TokenId=" + jwtTokenEntity.Id + " exceeded MaxUseCount=" + jwtTokenEntity.MaxUseCount);
             }
             else
             {
@@ -269,7 +276,7 @@ namespace TokenService.Service
             if (DateTime.Compare(rightNow, jwtTokenEntity.ExpirationTime) > 0)
             {
                 // token expired
-                throw new FailedException("JWT TokenId=" + jwtTokenEntity.Id + " expired now=" + rightNow + " ExpirationTime=" + jwtTokenEntity.ExpirationTime);
+                throw new ViolationException("JWT TokenId=" + jwtTokenEntity.Id + " expired now=" + rightNow + " ExpirationTime=" + jwtTokenEntity.ExpirationTime);
             }
             // TODO make TokenEntity immutable and return copy
             return jwtTokenEntity;

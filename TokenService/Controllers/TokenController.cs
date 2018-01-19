@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TokenService.Exception;
 using TokenService.Model.Dto;
 using TokenService.Service;
 
@@ -40,15 +41,15 @@ namespace TokenService.Controllers
         /// <returns></returns>
         /// <response code="201">Returns the newly created token</response>
         /// <response code="400">Token not created</response>
+        /// <response code="500">Internal configuration error</response>
         [HttpPost("Generate", Name = "GenerateToken")]
         [ProducesResponseType(typeof(TokenCreateResponse), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(TokenCreateResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ConsistencyException), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(BadArgumentException), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ConfigurationException), StatusCodes.Status500InternalServerError)]
         public IActionResult Create([FromBody]TokenCreateRequest value)
         {
             TokenCreateResponse response = _creationService.CreateToken(value);
-            // how do we code this?
-            // return StatusCode(201, response);
-            // or 
             return Created("../Validate", response);
         }
 
@@ -59,48 +60,22 @@ namespace TokenService.Controllers
         /// <param name="value"></param>
         /// <returns></returns>
         /// <response code="200">Token was validated successfully</response>
-        /// <response code="400">Some problem processing requests</response>
+        /// <response code="400">Some problem processing requests or token mismatch</response>
         /// <response code="404">Token does not exist in data store</response>
-        /// <response code="409">Token is invalid</response>
+        /// <response code="409">Token is invalid due to expiration or effectivity</response>
+        /// <response code="500">Internal configuration error</response>
         [HttpPost("Validate", Name = "ValidateToken")]
         [ProducesResponseType(typeof(TokenValidateResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(TokenValidateResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(TokenValidateResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(TokenValidateResponse), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(BadArgumentException), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ConsistencyException), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(NotFoundException), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ViolationException), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ConfigurationException), StatusCodes.Status500InternalServerError)]
         public IActionResult Validate([FromBody]TokenValidateRequest value)
         {
             TokenValidateResponse response = _validationService.ValidateToken(value);
             return Ok(response);
         }
 
-        /*
-
-
-                // GET: api/Token
-                [HttpGet]
-                public IEnumerable<string> Get()
-                {
-                    return new string[] { "value1", "value2" };
-                }
-
-                // GET: api/Token/5
-                [HttpGet("{id}", Name = "Get")]
-                public string Get(int id)
-                {
-                    return "value";
-                }
-
-                // PUT: api/Token/5
-                [HttpPut("{id}")]
-                public void Put(int id, [FromBody]string value)
-                {
-                }
-
-                // DELETE: api/ApiWithActions/5
-                [HttpDelete("{id}")]
-                public void Delete(int id)
-                {
-                }
-            */
     }
 }

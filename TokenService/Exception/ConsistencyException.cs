@@ -3,16 +3,16 @@
 namespace TokenService.Exception
 {
     /// <summary>
-    /// 
+    /// There is some error in the token configuration itself or signature mismatch
     /// </summary>
-    public class FailedException : TokenServiceException
+    public class ConsistencyException : TokenServiceException
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
         /// <param name="serviceResponse"></param>
-        public FailedException(string message, TokenResponse serviceResponse) : base(message, serviceResponse)
+        public ConsistencyException(string message, TokenResponse serviceResponse) : base(message, serviceResponse)
         {
         }
 
@@ -22,14 +22,14 @@ namespace TokenService.Exception
         /// <param name="message"></param>
         /// <param name="innerException"></param>
         /// <param name="serviceResponse"></param>
-        public FailedException(string message, System.Exception innerException, TokenResponse serviceResponse) : base(message, innerException, serviceResponse)
+        public ConsistencyException(string message, System.Exception innerException, TokenResponse serviceResponse) : base(message, innerException, serviceResponse)
         {
         }
 
         /// <summary>
         /// override standard Excepton constructor
         /// </summary>
-        public FailedException() : base()
+        public ConsistencyException() : base()
         {
         }
 
@@ -37,7 +37,7 @@ namespace TokenService.Exception
         /// override standard Excepton constructor
         /// </summary>
         /// <param name="message"></param>
-        public FailedException(string message) : base(message)
+        public ConsistencyException(string message) : base(message)
         {
         }
 
@@ -46,7 +46,7 @@ namespace TokenService.Exception
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public FailedException(string message, System.Exception innerException) : base(message, innerException)
+        public ConsistencyException(string message, System.Exception innerException) : base(message, innerException)
         {
         }
 

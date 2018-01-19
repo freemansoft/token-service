@@ -11,7 +11,7 @@ namespace TokenService.Service
     public static class TokenServiceInterfaceExtensions
     {
         /// <summary>
-        /// throws BadArgumentException if there is a problem with the token.
+        /// throws BadArgumentException if there is a problem with the token found by validaton framework
         /// Adds a TokenResponseMessage for each validation error
         /// </summary>
         /// <param name="myTokenService"></param>

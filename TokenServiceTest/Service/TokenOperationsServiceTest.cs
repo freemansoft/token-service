@@ -3,8 +3,8 @@ using Moq;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using TokenService.Exception;
-using TokenService.Model.Entity;
 using TokenService.Model.Dto;
+using TokenService.Model.Entity;
 using TokenService.Repository;
 using TokenService.Service;
 using Xunit;
@@ -139,7 +139,7 @@ namespace TokenServiceTest.Service
                     serviceUnderTest.ValidateEncodedJwt(receivedToken, badEntity, badEntity.ProtectedUrl);
                     Assert.False(true, "Expected FailedException");
                 }
-                catch (FailedException e)
+                catch (ConsistencyException e)
                 {
                     _output.WriteLine("Caught expected exception: " + e.Message);
                 }
@@ -166,7 +166,7 @@ namespace TokenServiceTest.Service
                 serviceUnderTest.ValidateEncodedJwt(receivedToken, foundEntity, "http://badurl");
                 Assert.False(true, "Expected FailedException");
             }
-            catch (FailedException e)
+            catch (ViolationException e)
             {
                 _output.WriteLine("Caught expected exception: " + e.Message);
             }
@@ -188,7 +188,7 @@ namespace TokenServiceTest.Service
                 serviceUnderTest.ValidateEncodedJwt(receivedToken, foundEntity, "x" + foundEntity.ProtectedUrl);
                 Assert.False(true, "Expected FailedException");
             }
-            catch (FailedException e)
+            catch (ViolationException e)
             {
                 _output.WriteLine("Caught expected exception: " + e.Message);
             }
@@ -219,7 +219,7 @@ namespace TokenServiceTest.Service
             {
                 serviceUnderTest.ValidateEncodedJwt(receivedToken, foundEntity, foundEntity.ProtectedUrl + "dogfood");
             }
-            catch (FailedException e)
+            catch (ViolationException e)
             {
                 Assert.False(true, "Caught unexpected exception: " + e.Message + " " + e.ServiceResponse);
             }
@@ -245,25 +245,20 @@ namespace TokenServiceTest.Service
             Assert.NotNull(receivedToken);
             // create validation request from the data used to create the token
             TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedUrl);
-            try
-            {
-                // first one should succeed
-                TokenValidateResponse response = serviceUnderTest.ValidateToken(validateThis);
-                // Lets jam a context validation into this test also. probably should be broken out into its own test in the future
-                Assert.NotNull(response.Context);
-            }
-            catch (FailedException e)
-            {
-                Assert.False(true, "Caught unexpected exception: " + e.Message + " " + e.ServiceResponse);
-            }
+
+            // first one should succeed
+            TokenValidateResponse response1 = serviceUnderTest.ValidateToken(validateThis);
+            // Lets jam a context validation into this test also. probably should be broken out into its own test in the future
+            Assert.NotNull(response1.Context);
+
             try
             {
                 // usage count was set to one so should now fail
-                TokenValidateResponse response = serviceUnderTest.ValidateToken(validateThis);
+                TokenValidateResponse response2 = serviceUnderTest.ValidateToken(validateThis);
                 // Lets jam a context validation into this test also. probably should be broken out into its own test in the future
                 Assert.False(true, "Did not catch exception when usage count exceeded");
             }
-            catch (FailedException e)
+            catch (ViolationException e)
             {
                 _output.WriteLine("Caught expected exception: " + e.Message + " " + e.ServiceResponse);
             }
@@ -292,7 +287,7 @@ namespace TokenServiceTest.Service
                 TokenValidateResponse response = serviceUnderTest.ValidateToken(validateThis);
                 Assert.False(true, "Did not catch exception when token expired");
             }
-            catch (FailedException e)
+            catch (ViolationException e)
             {
                 // TODO should validate the message or something...
                 _output.WriteLine("Caught expected exception: " + e.Message + " " + e.ServiceResponse);
@@ -321,7 +316,7 @@ namespace TokenServiceTest.Service
                 TokenValidateResponse response = serviceUnderTest.ValidateToken(validateThis);
                 Assert.False(true, "Did not catch exception when token not yet effective");
             }
-            catch (FailedException e)
+            catch (ViolationException e)
             {
                 // TODO should validate the message or something...
                 _output.WriteLine("Caught expected exception: " + e.Message + " " + e.ServiceResponse);
@@ -353,7 +348,7 @@ namespace TokenServiceTest.Service
                 serviceUnderTest.ValidateExpirationPolicy(anEntity);
                 Assert.False(true, "Should have failed due to time based expiration");
             }
-            catch (FailedException e)
+            catch (ViolationException e)
             {
                 // TODO validate the actual exception
                 _output.WriteLine("Caught expected exception: " + e.Message + " " + e.ServiceResponse);
@@ -375,7 +370,7 @@ namespace TokenServiceTest.Service
                 serviceUnderTest.ValidateExpirationPolicy(anEntity);
                 Assert.False(true, "Should have failed due exceeded usage count");
             }
-            catch (FailedException e)
+            catch (ViolationException e)
             {
                 _output.WriteLine("Caught expected exception: " + e.Message + " " + e.ServiceResponse);
             }
