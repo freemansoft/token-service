@@ -26,6 +26,15 @@ namespace TokenService.Model.Dto
         }
 
         /// <summary>
+        /// URL that this token is issued for.  The protected resource. 
+        /// Matched with Regex "^"+ProtectedResource
+        /// The <i>sub</i> in the JWT
+        /// </summary>
+        [JsonProperty(PropertyName = "protectedResource", Required = Required.Always)]
+        public string ProtectedResource { get; set; }
+
+
+        /// <summary>
         /// Arbitrary valid json that acts as a shared context between token initiator and the validator.
         /// </summary>
         [JsonProperty(PropertyName = "context", NullValueHandling = NullValueHandling.Ignore)]

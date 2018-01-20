@@ -30,12 +30,13 @@ namespace TokenService.Model.Dto
         public string JwtToken { get; set; }
 
         /// <summary>
-        /// URL that this token is issued for.  The protected resource 
+        /// Resource for which the client presented the token for validation.
+        /// The system will match this resource against the registered protected resource if not null.
+        /// The system will ignore this value and the protected resource if this value is not present, null or empty.
         /// </summary>
-        [Required]
-        [Url]
-        [JsonProperty(PropertyName = "protectedUrl")]
-        public string ProtectedUrl { get; set; }
+        [RegularExpression(pattern: "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?")] // RFC 2396
+        [JsonProperty(PropertyName = "accessedResource")]
+        public string AccessedResource { get; set; }
 
         public override string ToString() => JsonConvert.SerializeObject(this);
 

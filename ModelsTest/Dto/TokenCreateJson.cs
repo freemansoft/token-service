@@ -4,7 +4,7 @@
     {
         static string TokenCreateBodyWithoutContextc = @"
             ""modelVersion"" : ""1.0"",
-            ""protectedUrl"" : ""http://www.google.com"",
+            ""protectedResource"" : ""http://www.google.com"",
             ""onBehalfOf"":
             {
                 ""providerName"" : ""google"",

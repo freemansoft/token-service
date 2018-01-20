@@ -107,7 +107,9 @@ I found these links useful while trying to understand how to use Docker with .Ne
   * [Model validation intro](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation)
   * [Unit testing when using model validation](https://dotnetliberty.com/index.php/2016/01/04/how-to-unit-test-asp-net-5-mvc-6-modelstate/)
 * JWT
+  * [JWT Introduction](https://jwt.io/introduction/)
   * [JWT validation and authorization in asp net core](https://blogs.msdn.microsoft.com/webdev/2017/04/06/jwt-validation-and-authorization-in-asp-net-core/)
+  * [OWASP Security Cheat Sheet](https://www.owasp.org/index.php/REST_Security_Cheat_Sheet)
 * ASP .Net in Azure
   * [Deploy an ASP.NET container in a Docker Host](https://docs.microsoft.com/en-us/azure/vs-azure-tools-docker-hosting-web-apps-in-docker)
 * ASP .Net in AWS
@@ -116,9 +118,9 @@ I found these links useful while trying to understand how to use Docker with .Ne
   * [Creating and Deploying Elastic Beanstalk applications in DotNet using Vistual Studio](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_NET.html)
   * [AWS SDK for Dot Net](https://aws.amazon.com/sdk-for-net/)
   * [Using Visual Studio with AWS CodeStar](http://docs.aws.amazon.com/codestar/latest/userguide/setting-up-ide-vs.html)
-* AWS Code**
- * [Installing the Code Deploy agent if it is busted somehow](https://docs.aws.amazon.com/codedeploy/latest/userguide/codedeploy-agent-operations-install-ubuntu.html)
- * 
+* AWS Code
+  * [Installing the Code Deploy agent if it is busted somehow](https://docs.aws.amazon.com/codedeploy/latest/userguide/codedeploy-agent-operations-install-ubuntu.html)
+
 
 -----------
 

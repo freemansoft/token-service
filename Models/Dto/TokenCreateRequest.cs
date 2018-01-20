@@ -42,13 +42,13 @@ namespace TokenService.Model.Dto
         public string ModelVersion { get; set; }
         /// <summary>
         /// URL that this token is issued for.  The protected resource. 
-        /// Matched with Regex "^"+ProtectedUrl
+        /// Matched with Regex "^"+ProtectedResource
         /// The <i>sub</i> in the JWT
         /// </summary>
         [Required]
-        [Url]
-        [JsonProperty(PropertyName = "protectedUrl", Required = Required.Always)]
-        public string ProtectedUrl { get; set; }
+        [RegularExpression(pattern: "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?")] // RFC 2396
+        [JsonProperty(PropertyName = "protectedResource", Required = Required.Always)]
+        public string ProtectedResource { get; set; }
         /// <summary>
         /// The token inititiation request is on behalf of the expected token user
         /// The <i>aud</i> in the JWT

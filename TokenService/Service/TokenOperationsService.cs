@@ -98,7 +98,7 @@ namespace TokenService.Service
         {
             ValidateRequest(request);
             string jwtEncodedString = request.JwtToken;
-            string protectedUrl = request.ProtectedUrl;
+            string protectedUrl = request.AccessedResource;
             // convert string to POCO
             JwtSecurityToken jwtToken = new JwtSecurityToken(jwtEncodedString);
             TokenEntity jwtTokenEntity = _repository.GetById(jwtToken.Id);
@@ -109,11 +109,13 @@ namespace TokenService.Service
             }
             ValidateTokenSignature(jwtEncodedString, jwtTokenEntity);
             // validate the basic token and the URL
-            ValidateEncodedJwt(jwtToken, jwtTokenEntity, request.ProtectedUrl);
+            ValidateEncodedJwt(jwtToken, jwtTokenEntity);
+            ValidateResourceAllowed(jwtToken, jwtTokenEntity, request.AccessedResource);
             TokenEntity postValidationEntity = ValidateExpirationPolicy(jwtTokenEntity);
             // assuming we validated and found it
             TokenValidateResponse response = new TokenValidateResponse()
             {
+                ProtectedResource = jwtTokenEntity.ProtectedResource,
                 Context = jwtTokenEntity.Context
             };
             // save the updated usage count and any audit information
@@ -143,7 +145,7 @@ namespace TokenService.Service
                 InitiationTime = now,
                 JwtUniqueIdentifier = Guid.NewGuid().ToString(),
                 JwtSecret = SecretKey(),
-                ProtectedUrl = request.ProtectedUrl,
+                ProtectedResource = request.ProtectedResource,
             };
             return entity;
         }
@@ -174,7 +176,7 @@ namespace TokenService.Service
             JwtPayload payload = new JwtPayload()
             {
                 {"jti", entity.JwtUniqueIdentifier },
-                {"sub", entity.ProtectedUrl },
+                {"sub", entity.ProtectedResource },
                 {"aud", entity.OnBehalfOf.UserName },
                 {"iss", entity.Initiator.UserName },
                 {"iat", entity.InitiationTime },
@@ -207,13 +209,13 @@ namespace TokenService.Service
         }
 
         /// <summary>
+        /// Verifies request against the token from the store. 
         /// This thows an exception on validation failure. 
         /// Should it return something instead?
         /// </summary>
         /// <param name="jwtToken">token submitted as part of validation request</param>
         /// <param name="jwtTokenEntity">token retrieved from the token store</param>
-        /// <param name="targetUrl">url validation request is being made for</param>
-        internal void ValidateEncodedJwt(JwtSecurityToken jwtToken, TokenEntity jwtTokenEntity, string targetUrl)
+        internal void ValidateEncodedJwt(JwtSecurityToken jwtToken, TokenEntity jwtTokenEntity)
         {
             // they should always match since we use the jwtToken "id" to retrieve the jwtTokenEntity from the store
             if (!jwtTokenEntity.Id.Equals(jwtToken.Id))
@@ -223,19 +225,37 @@ namespace TokenService.Service
                 throw new ConsistencyException(String.Format(
                     "JWT TokenId={0} does not match stored TokenId={1}", jwtToken.Id, jwtTokenEntity.Id));
             }
-            // Validate the requested URL against the URL the token was created for
-            // Note that this is a SOFT match anchored at the start
-            // todo add support for real regex or hard/soft.
-            Regex ourRegex = new Regex("^" + jwtTokenEntity.ProtectedUrl, RegexOptions.IgnoreCase);
-            Match urlRegexResults = ourRegex.Match(targetUrl);
-            if (!urlRegexResults.Success)
+        }
+
+        /// <summary>
+        /// Verifies the targetResource matches the protectedResource.
+        /// Returns immediately if the targetResources null or empty.
+        /// This thows an exception on validation failure. 
+        /// Should it return something instead?
+        /// </summary>
+        /// <param name="jwtToken">token submitted as part of validation request</param>
+        /// <param name="jwtTokenEntity">token retrieved from the token store</param>
+        /// <param name="targetResource">url validation request is being made for</param>
+        internal void ValidateResourceAllowed(JwtSecurityToken jwtToken, TokenEntity jwtTokenEntity, string targetResource)
+        {
+            if (!String.IsNullOrWhiteSpace(targetResource))
             {
-                _logger.LogWarning(
-                    "JWT TokenId={0} RequestedUrl='{1}' does not match store token ProtectedUrl='{2}'", jwtToken.Id, targetUrl, jwtTokenEntity.ProtectedUrl);
-                throw new ViolationException(String.Format(
-                    "JWT TokenId={0} RequestedUrl='{1}' does not match store token ProtectedUrl='{2}'", jwtToken.Id, targetUrl, jwtTokenEntity.ProtectedUrl));
+                // Validate the requested URL against the URL the token was created for
+                // Essentially an exact match. I left this in as a placeholder for future regex
+                Regex ourRegex = new Regex("^" + jwtTokenEntity.ProtectedResource + "$", RegexOptions.IgnoreCase);
+                Match urlRegexResults = ourRegex.Match(targetResource);
+                if (!urlRegexResults.Success)
+                {
+                    _logger.LogWarning(
+                        "JWT TokenId={0} RequestedUrl='{1}' does not match store token ProtectedResource='{2}'", jwtToken.Id, targetResource, jwtTokenEntity.ProtectedResource);
+                    throw new ViolationException(String.Format(
+                        "JWT TokenId={0} RequestedUrl='{1}' does not match store token ProtectedResource='{2}'", jwtToken.Id, targetResource, jwtTokenEntity.ProtectedResource));
+                }
             }
-            // victory!
+            else
+            {
+                _logger.LogDebug("JWT TokenId={0} no target url provided for verification against ProtectedResource='{2}'", jwtToken.Id, jwtTokenEntity.ProtectedResource);
+            }
         }
 
         /// <summary>

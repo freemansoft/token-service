@@ -233,7 +233,7 @@ namespace TokenServiceTest.Repository
         {
             return new TokenEntity(obo, initiator)
             {
-                ProtectedUrl = "http://www.foo.com",
+                ProtectedResource = "http://www.foo.com",
                 JwtUniqueIdentifier = "my-unique-identifier",
             };
         }

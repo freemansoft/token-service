@@ -5,17 +5,19 @@
         public static string TokenValidateRequest = @"{
             ""modelVersion"" : ""1.0"",
             ""jwtToken"" : ""=jlsdfjkldfdlkd"",
-            ""protectedUrl"" : ""http://www.foobar.com""
+            ""accessedResource"" : ""http://www.foobar.com""
         }";
 
         public static string TokenValidateResponseContextNone = @"{
             ""modelVersion"" : ""1.0"",
+            ""protectedResource"" : ""http://www.foobar.com"",
             ""messages"" : [
             ],
         }";
 
         public static string TokenValidateResponseMessages = @"{
             ""modelVersion"" : ""1.0"",
+            ""protectedResource"" : ""http://www.foobar.com"",
             ""messages"" : [
                 {
                     ""id"" : ""DOOM001"",
@@ -30,6 +32,7 @@
 
         public static string TokenValidateResponseContextProperty = @"{
             ""modelVersion"" : ""1.0"",
+            ""protectedResource"" : ""http://www.foobar.com"",
             ""messages"" : [
             ],
             ""context"" : ""singleProp""
@@ -37,6 +40,7 @@
 
         public static string TokenValidateResponseContextObject = @"{
             ""modelVersion"" : ""1.0"",
+            ""protectedResource"" : ""http://www.foobar.com"",
             ""messages"" : [
             ],
             ""context"" : {

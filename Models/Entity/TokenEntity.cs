@@ -69,12 +69,11 @@ namespace TokenService.Model.Entity
         [JsonProperty(PropertyName = "modelVersion", Required = Required.Always)]
         public string ModelVersion { get; set; }
         /// <summary>
-        /// url protected by this token.
-        /// Matched with Regex "^"+ProtectedUrl
-        /// The JWT <i>sub</i>
+        /// Resource that was registered as the "protectedResource" at the time of token creation.
+        /// This is to support future functionality where accessedResource and protectedResource have differences
         /// </summary>
-        [JsonProperty(PropertyName = "protectedUrl")]
-        public string ProtectedUrl { get; set; }
+        [JsonProperty(PropertyName = "protectedResource")]
+        public string ProtectedResource { get; set; }
         /// <summary>
         /// the JWT given to the user to be presented to the consuming system and passed to the validate call()
         /// </summary>

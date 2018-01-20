@@ -34,7 +34,7 @@ namespace TokenServiceTest
             TokenCreateRequest request = new TokenCreateRequest(obo)
             {
                 MaxUsageCount = 1,
-                ProtectedUrl = bogusTestUrl,
+                ProtectedResource = bogusTestUrl,
                 Context = JObject.Parse(@"{ ""x"":""value""}"),
             };
             return request;
@@ -47,7 +47,7 @@ namespace TokenServiceTest
             TokenValidateRequest ourValidateRequest = new TokenValidateRequest()
             {
                 JwtToken = jwtToken,
-                ProtectedUrl = protectedUrl
+                AccessedResource = protectedUrl
             };
             return ourValidateRequest;
         }

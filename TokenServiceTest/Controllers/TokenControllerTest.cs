@@ -61,7 +61,7 @@ namespace TokenServiceTest.Controllers
             TokenCreateResponse response = result.Value as TokenCreateResponse;
 
             // assume CreateTokenHappyPath() validates the create path so now lets run the validate path
-            TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(response.JwtToken, request.ProtectedUrl);
+            TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(response.JwtToken, request.ProtectedResource);
             Assert.Equal(validateThis.JwtToken, response.JwtToken);
             // shouldn't be any messages
             Assert.Equal(0, response.Messages.Count);

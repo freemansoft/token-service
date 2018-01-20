@@ -136,7 +136,7 @@ namespace TokenServiceTest.Service
                 };
                 try
                 {
-                    serviceUnderTest.ValidateEncodedJwt(receivedToken, badEntity, badEntity.ProtectedUrl);
+                    serviceUnderTest.ValidateEncodedJwt(receivedToken, badEntity);
                     Assert.False(true, "Expected FailedException");
                 }
                 catch (ConsistencyException e)
@@ -150,8 +150,11 @@ namespace TokenServiceTest.Service
             }
         }
 
+        /// <summary>
+        /// Verify completely different url works
+        /// </summary>
         [Fact]
-        public void ValidateEncodedJwtBadUrl()
+        public void ValidateProtectedUrlDifferent()
         {
             TokenCreateRequest request = ttu.BuildTokenCreateRequest();
             TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
@@ -163,7 +166,7 @@ namespace TokenServiceTest.Service
             Assert.NotNull(foundEntity);
             try
             {
-                serviceUnderTest.ValidateEncodedJwt(receivedToken, foundEntity, "http://badurl");
+                serviceUnderTest.ValidateResourceAllowed(receivedToken, foundEntity, "http://badurl");
                 Assert.False(true, "Expected FailedException");
             }
             catch (ViolationException e)
@@ -172,8 +175,11 @@ namespace TokenServiceTest.Service
             }
         }
 
+        /// <summary>
+        /// This was intended to be part of regex based tests where suffixes or paths were allowed based on protectedResource
+        /// </summary>
         [Fact]
-        public void ValidateEncodedJwtBadUrlAnchor()
+        public void ValidateProtectedExtraSuffixFails()
         {
             TokenCreateRequest request = ttu.BuildTokenCreateRequest();
             TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
@@ -185,7 +191,7 @@ namespace TokenServiceTest.Service
             Assert.NotNull(foundEntity);
             try
             {
-                serviceUnderTest.ValidateEncodedJwt(receivedToken, foundEntity, "x" + foundEntity.ProtectedUrl);
+                serviceUnderTest.ValidateResourceAllowed(receivedToken, foundEntity, foundEntity.ProtectedResource + "/some-suffix");
                 Assert.False(true, "Expected FailedException");
             }
             catch (ViolationException e)
@@ -204,8 +210,11 @@ namespace TokenServiceTest.Service
             // ValidateTokenSignature(string signedToken, TokenEntity jwtToken)
         }
 
+        /// <summary>
+        /// Exact match
+        /// </summary>
         [Fact]
-        public void ValidateEncodedJwtSuccess()
+        public void ValidateProtectedExactMatch()
         {
             TokenCreateRequest request = ttu.BuildTokenCreateRequest();
             TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
@@ -217,7 +226,33 @@ namespace TokenServiceTest.Service
             Assert.NotNull(foundEntity);
             try
             {
-                serviceUnderTest.ValidateEncodedJwt(receivedToken, foundEntity, foundEntity.ProtectedUrl + "dogfood");
+                serviceUnderTest.ValidateResourceAllowed(receivedToken, foundEntity, foundEntity.ProtectedResource);
+            }
+            catch (ViolationException e)
+            {
+                Assert.False(true, "Caught unexpected exception: " + e.Message + " " + e.ServiceResponse);
+            }
+        }
+
+        /// <summary>
+        /// No accessed provided
+        /// </summary>
+        [Fact]
+        public void ValidateProtectedNoAccessed()
+        {
+            TokenCreateRequest request = ttu.BuildTokenCreateRequest();
+            TokenCreateResponse createResult = serviceUnderTest.CreateToken(request);
+            Assert.NotNull(createResult.JwtToken);
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
+            Assert.NotNull(receivedToken);
+            TokenEntity foundEntity = inMemoryRepo.GetById(receivedToken.Id);
+            Assert.NotNull(foundEntity);
+            try
+            {
+                serviceUnderTest.ValidateResourceAllowed(receivedToken, foundEntity, null);
+                serviceUnderTest.ValidateResourceAllowed(receivedToken, foundEntity, "");
+                serviceUnderTest.ValidateResourceAllowed(receivedToken, foundEntity, "    ");
             }
             catch (ViolationException e)
             {
@@ -244,7 +279,7 @@ namespace TokenServiceTest.Service
             JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
             Assert.NotNull(receivedToken);
             // create validation request from the data used to create the token
-            TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedUrl);
+            TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedResource);
 
             // first one should succeed
             TokenValidateResponse response1 = serviceUnderTest.ValidateToken(validateThis);
@@ -280,7 +315,7 @@ namespace TokenServiceTest.Service
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
             // create validation request from the data used to create the token
-            TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedUrl);
+            TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedResource);
             try
             {
                 // should fail as expired
@@ -309,7 +344,7 @@ namespace TokenServiceTest.Service
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             JwtSecurityToken receivedToken = tokenHandler.ReadJwtToken(createResult.JwtToken);
             // create validation request from the data used to create the token
-            TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedUrl);
+            TokenValidateRequest validateThis = ttu.BuildTokenValidateRequest(createResult.JwtToken, request.ProtectedResource);
             try
             {
                 // should fail as expired
