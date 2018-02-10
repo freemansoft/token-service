@@ -2,7 +2,7 @@
 using TokenService.Model.Dto;
 using Xunit;
 
-namespace TokenService.ModelTest.Dto
+namespace ModelTest.Dto
 {
     public class TokenResponseTest
     {

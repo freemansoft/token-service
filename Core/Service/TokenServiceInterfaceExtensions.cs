@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using TokenService.Exception;
+using TokenService.Core.Exception;
 using TokenService.Model.Dto;
 
-namespace TokenService.Service
+namespace TokenService.Core.Service
 {
     /// <summary>
     /// extension methods for ITokenService implementers

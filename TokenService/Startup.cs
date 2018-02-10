@@ -6,9 +6,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
+using TokenService.Core.Repository;
 using TokenService.Model.Entity;
-using TokenService.Repository;
-using TokenService.Service;
+using TokenService.InMemory;
+using TokenService.Core.Service;
+using TokenService.InMemory.Repository;
 
 namespace TokenService
 {

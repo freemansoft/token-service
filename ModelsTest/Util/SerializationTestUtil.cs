@@ -1,4 +1,4 @@
-﻿namespace TokenService.ModelTest
+﻿namespace ModelTest
 {
     class SerializationTestUtil
     {

@@ -2,15 +2,16 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using TokenService.Exception;
+using TokenService.Core.Exception;
 using TokenService.Model.Dto;
 using TokenService.Model.Entity;
-using TokenService.Repository;
-using TokenService.Service;
+using TokenService.Core.Repository;
+using TokenService.Core.Service;
 using Xunit;
 using Xunit.Abstractions;
+using System.Collections.Generic;
 
-namespace TokenServiceTest.Service
+namespace CoreTest.Service
 {
     public class TokenOperationsServiceTest
     {
@@ -19,8 +20,8 @@ namespace TokenServiceTest.Service
         /// </summary>
         private readonly ITestOutputHelper _output;
 
-        private ILogger<TokenInMemRepository> repositoryLogger;
-        private TokenInMemRepository inMemoryRepo;
+        private ILogger<IRepository<TokenEntity>> repositoryLogger;
+        private IRepository<TokenEntity> inMemoryRepo;
         private ILogger<TokenOperationsService> serviceLogger;
         private TokenOperationsService serviceUnderTest;
 
@@ -31,8 +32,32 @@ namespace TokenServiceTest.Service
         {
             this._output = output;
             serviceLogger = Mock.Of<ILogger<TokenOperationsService>>();
-            repositoryLogger = Mock.Of<ILogger<TokenInMemRepository>>();
-            inMemoryRepo = new TokenInMemRepository(repositoryLogger);
+            repositoryLogger = Mock.Of<ILogger<IRepository<TokenEntity>>>();
+
+            // oh moma I live in fear of my life from from the long arm of Moq 
+            Mock<IRepository<TokenEntity>> someMock = new Mock<IRepository<TokenEntity>>();
+            Dictionary<string, TokenEntity> dict = new Dictionary<string,TokenEntity>();
+            someMock.Setup(x => x.Create(It.IsAny<TokenEntity>()))
+                .Callback((TokenEntity t) =>
+                {
+                    dict.Add(t.Id, t);
+                });
+            someMock.Setup(x => x.Update(It.IsAny<TokenEntity>()))
+                .Callback((TokenEntity t) =>
+                {
+                    dict.Remove(t.Id);
+                    dict.Add(t.Id,t);
+                });
+            someMock.Setup(x => x.GetById(It.IsAny<string>()))
+                .Returns((string key) =>
+                    dict.GetValueOrDefault(key, null));
+            someMock.Setup(x => x.Delete(It.IsAny<TokenEntity>()))
+                .Callback((TokenEntity t) =>
+                {
+                    dict.Remove(t.Id);
+                });
+            inMemoryRepo = someMock.Object;
+
             serviceUnderTest = new TokenOperationsService(serviceLogger, inMemoryRepo, ttu.BuildCryptographySettings());
 
         }

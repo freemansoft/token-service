@@ -1,18 +1,18 @@
 ﻿using TokenService.Model.Dto;
 
-namespace TokenService.Exception
+namespace TokenService.Core.Exception
 {
     /// <summary>
-    /// Failed Model Validation or Invalid token property while attempting to update store.
+    /// validation failed due to url, count, effectiveDate or expiration date
     /// </summary>
-    public class BadArgumentException : TokenServiceException
+    public class ViolationException : TokenServiceException
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
         /// <param name="serviceResponse"></param>
-        public BadArgumentException(string message, TokenResponse serviceResponse) : base(message, serviceResponse)
+        public ViolationException(string message, TokenResponse serviceResponse) : base(message, serviceResponse)
         {
         }
 
@@ -22,14 +22,14 @@ namespace TokenService.Exception
         /// <param name="message"></param>
         /// <param name="innerException"></param>
         /// <param name="serviceResponse"></param>
-        public BadArgumentException(string message, System.Exception innerException, TokenResponse serviceResponse) : base(message, innerException, serviceResponse)
+        public ViolationException(string message, System.Exception innerException, TokenResponse serviceResponse) : base(message, innerException, serviceResponse)
         {
         }
 
         /// <summary>
         /// override standard Excepton constructor
         /// </summary>
-        public BadArgumentException() : base()
+        public ViolationException() : base()
         {
         }
 
@@ -37,7 +37,7 @@ namespace TokenService.Exception
         /// override standard Excepton constructor
         /// </summary>
         /// <param name="message"></param>
-        public BadArgumentException(string message) : base(message)
+        public ViolationException(string message) : base(message)
         {
         }
 
@@ -46,7 +46,7 @@ namespace TokenService.Exception
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public BadArgumentException(string message, System.Exception innerException) : base(message, innerException)
+        public ViolationException(string message, System.Exception innerException) : base(message, innerException)
         {
         }
 

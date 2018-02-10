@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
-using TokenService.Exception;
+using TokenService.Core.Exception;
 using TokenService.Model.Entity;
-using TokenService.Repository;
+using TokenService.Core.Repository;
 using Xunit;
 using Xunit.Abstractions;
+using TokenService.InMemory.Repository;
 
-namespace TokenServiceTest.Repository
+namespace InMemoryTest.Repository
 {
     public class TokenInMemRepositoryTest
     {

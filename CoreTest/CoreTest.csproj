@@ -5,13 +5,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <ApplicationIcon />
+    <AssemblyName>TokenService.CoreTest</AssemblyName>
 
-    <OutputType>Library</OutputType>
-
-    <StartupObject />
-
-    <AssemblyName>TokenService.TokenServiceTest</AssemblyName>
+    <RootNamespace>CoreTest</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,10 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AWS\AWS.csproj" />
-    <ProjectReference Include="..\InMemory\InMemory.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\TokenService\TokenService.csproj" />
+    <ProjectReference Include="..\Models\Model.csproj" />
   </ItemGroup>
 
 </Project>

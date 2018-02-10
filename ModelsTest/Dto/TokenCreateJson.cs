@@ -1,4 +1,4 @@
-﻿namespace TokenService.ModelTest.Dto
+﻿namespace ModelTest.Dto
 {
     class TokenCreateJson
     {

@@ -4,7 +4,7 @@ using TokenService.Model.Entity;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace TokenService.ModelTest.Entity
+namespace ModelTest.Entity
 {
     public class AuthorizationEntityTest
     {

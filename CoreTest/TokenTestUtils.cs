@@ -4,7 +4,7 @@ using System;
 using TokenService.Model.Dto;
 using TokenService.Core.Service;
 
-namespace TokenServiceTest
+namespace CoreTest
 {
     class TokenTestUtils
     {

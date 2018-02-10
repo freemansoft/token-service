@@ -1,6 +1,6 @@
 ﻿using TokenService.Model.Dto;
 
-namespace TokenService.Exception
+namespace TokenService.Core.Exception
 {
     /// <summary>
     /// 

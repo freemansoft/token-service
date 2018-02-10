@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TokenService.Exception;
+using TokenService.Core.Exception;
 using TokenService.Model.Dto;
-using TokenService.Service;
+using TokenService.Core.Service;
 
 namespace TokenService.Controllers
 {

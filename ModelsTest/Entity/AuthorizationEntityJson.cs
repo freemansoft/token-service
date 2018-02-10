@@ -1,4 +1,4 @@
-﻿namespace TokenService.ModelTest.Entity
+﻿namespace ModelTest.Entity
 {
     class AuthorizationEntityJson
     {

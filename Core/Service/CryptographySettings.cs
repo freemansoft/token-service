@@ -1,4 +1,4 @@
-﻿namespace TokenService.Service
+﻿namespace TokenService.Core.Service
 {
     /// <summary>
     /// Cryptography and security settings from the appsettings file chain.

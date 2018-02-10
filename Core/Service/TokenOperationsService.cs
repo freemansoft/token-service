@@ -7,12 +7,12 @@ using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.RegularExpressions;
-using TokenService.Exception;
+using TokenService.Core.Exception;
 using TokenService.Model.Dto;
 using TokenService.Model.Entity;
-using TokenService.Repository;
+using TokenService.Core.Repository;
 
-namespace TokenService.Service
+namespace TokenService.Core.Service
 {
     /// <summary>
     /// Token creation and managment service implementation

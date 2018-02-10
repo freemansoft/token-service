@@ -3,10 +3,9 @@
 //
 // These assembly notations could be put in any file.  They are here for nostalgia reasons 
 //
-[assembly: InternalsVisibleTo("ModelTest")]
-[assembly: InternalsVisibleTo("TokenService")]
+[assembly: InternalsVisibleTo("TokenService.CoreTest")]
 
-namespace TokenService.Model
+namespace TokenService
 {
     class ModelsAssembly
     {

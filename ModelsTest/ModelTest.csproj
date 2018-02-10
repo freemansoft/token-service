@@ -5,7 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <RootNamespace>TokenService.ModelTest</RootNamespace>
+    <RootNamespace>ModelTest</RootNamespace>
 
     <AssemblyName>TokenService.ModelTest</AssemblyName>
   </PropertyGroup>

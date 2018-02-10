@@ -1,6 +1,6 @@
 ﻿using TokenService.Model.Dto;
 
-namespace TokenService.Service
+namespace TokenService.Core.Service
 {
     /// <summary>
     /// Token creation and managment service API

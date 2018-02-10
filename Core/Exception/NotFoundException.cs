@@ -1,18 +1,18 @@
 ﻿using TokenService.Model.Dto;
 
-namespace TokenService.Exception
+namespace TokenService.Core.Exception
 {
     /// <summary>
-    /// Some internal component was misconfigured or auto injected object not injected
+    /// Object (Token) not found
     /// </summary>
-    public class ConfigurationException : TokenServiceException
+    public class NotFoundException : TokenServiceException
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
         /// <param name="serviceResponse"></param>
-        public ConfigurationException(string message, TokenResponse serviceResponse) : base(message, serviceResponse)
+        public NotFoundException(string message, TokenResponse serviceResponse) : base(message, serviceResponse)
         {
         }
 
@@ -22,14 +22,14 @@ namespace TokenService.Exception
         /// <param name="message"></param>
         /// <param name="innerException"></param>
         /// <param name="serviceResponse"></param>
-        public ConfigurationException(string message, System.Exception innerException, TokenResponse serviceResponse) : base(message, innerException, serviceResponse)
+        public NotFoundException(string message, System.Exception innerException, TokenResponse serviceResponse) : base(message, innerException, serviceResponse)
         {
         }
 
         /// <summary>
         /// override standard Excepton constructor
         /// </summary>
-        public ConfigurationException() : base()
+        public NotFoundException() : base()
         {
         }
 
@@ -37,7 +37,7 @@ namespace TokenService.Exception
         /// override standard Excepton constructor
         /// </summary>
         /// <param name="message"></param>
-        public ConfigurationException(string message) : base(message)
+        public NotFoundException(string message) : base(message)
         {
         }
 
@@ -46,7 +46,7 @@ namespace TokenService.Exception
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public ConfigurationException(string message, System.Exception innerException) : base(message, innerException)
+        public NotFoundException(string message, System.Exception innerException) : base(message, innerException)
         {
         }
 

@@ -1,6 +1,6 @@
 ﻿using TokenService.Model.Dto;
 
-namespace TokenService.Exception
+namespace TokenService.Core.Exception
 {
     /// <summary>
     /// There is some error in the token configuration itself. expected values did not align

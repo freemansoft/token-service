@@ -4,7 +4,7 @@ using TokenService.Model.Dto;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace TokenService.ModelTest.Dto
+namespace ModelTest.Dto
 {
     public class TokenValidateRequestTest
     {

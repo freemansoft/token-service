@@ -1,7 +1,7 @@
 ﻿using System;
 using TokenService.Model;
 
-namespace TokenService.Repository
+namespace TokenService.Core.Repository
 {
     /// <summary>
     /// used to persist to our document store

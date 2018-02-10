@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using TokenService.Exception;
+using TokenService.Core.Exception;
 using TokenService.Model.Entity;
 using TokenService.Model.Dto;
+using TokenService.Core.Repository;
 
-namespace TokenService.Repository
+namespace TokenService.InMemory.Repository
 {
     /// <summary>
     /// Used for token persistence
