@@ -2,7 +2,7 @@
 
 namespace AWS
 {
-    public class Class1
+    public class TableUtil
     {
     }
 }

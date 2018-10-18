@@ -120,6 +120,9 @@ I found these links useful while trying to understand how to use Docker with .Ne
   * [Using Visual Studio with AWS CodeStar](http://docs.aws.amazon.com/codestar/latest/userguide/setting-up-ide-vs.html)
 * AWS Code
   * [Installing the Code Deploy agent if it is busted somehow](https://docs.aws.amazon.com/codedeploy/latest/userguide/codedeploy-agent-operations-install-ubuntu.html)
+* Moq
+  * [Mocking a Repository](http://www.williablog.net/post/2009/12/15/Mock-a-database-repository-using-Moq.aspx)
+  * [Mocking with previous parameters]https://stackoverflow.com/questions/3269717/moq-how-to-get-to-a-parameter-passed-to-a-method-of-a-mocked-service
 
 
 -----------
