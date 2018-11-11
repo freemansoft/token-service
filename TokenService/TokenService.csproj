@@ -35,7 +35,7 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
-    <PackageReference Include="swashbuckle.aspnetcore" Version="3.0.0" />
+    <PackageReference Include="swashbuckle.aspnetcore" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,14 +2,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Models\Model.csproj", "{CA55CB7D-D06A-480D-BE42-764F878D39BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Models\Model.csproj", "{CA55CB7D-D06A-480D-BE42-764F878D39BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelTest", "ModelsTest\ModelTest.csproj", "{7E6A50C5-96E6-49E6-8CF7-ACBBDFDF3ADA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelTest", "ModelsTest\ModelTest.csproj", "{7E6A50C5-96E6-49E6-8CF7-ACBBDFDF3ADA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CA55CB7D-D06A-480D-BE42-764F878D39BA} = {CA55CB7D-D06A-480D-BE42-764F878D39BA}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenService", "TokenService\TokenService.csproj", "{E9ABC5C8-FC33-4A6E-8AB2-A8F359CEC498}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenService", "TokenService\TokenService.csproj", "{E9ABC5C8-FC33-4A6E-8AB2-A8F359CEC498}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C8C86636-1B64-44FD-BB72-36487DF37E53}"
 EndProject
@@ -28,13 +28,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		scripts\virtualhost.conf = scripts\virtualhost.conf
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenServiceTest", "TokenServiceTest\TokenServiceTest.csproj", "{D58A48AB-0D77-4327-896A-A5CCCA521089}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenServiceTest", "TokenServiceTest\TokenServiceTest.csproj", "{D58A48AB-0D77-4327-896A-A5CCCA521089}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AWS", "AWS\AWS.csproj", "{32602B05-8760-4F30-8BE5-17DD2F49B0E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWS", "AWS\AWS.csproj", "{32602B05-8760-4F30-8BE5-17DD2F49B0E9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{F62B958E-0DC4-44BF-847A-3D09F7E8EE38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{F62B958E-0DC4-44BF-847A-3D09F7E8EE38}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InMemory", "InMemory\InMemory.csproj", "{512EC24A-EE65-4C73-9169-1615481D8F18}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InMemory", "InMemory\InMemory.csproj", "{512EC24A-EE65-4C73-9169-1615481D8F18}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreTest", "CoreTest\CoreTest.csproj", "{1153FF18-356D-4195-BD31-89369641237D}"
 EndProject

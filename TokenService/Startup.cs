@@ -85,7 +85,7 @@ namespace TokenService
         /// IHostingEnvironment and ILoggerFactory may be specified in method signature
         /// </summary>
         /// <param name="app"></param>
-        /// <param name="env"></param>
+        /// <param name="env"></param> https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments
         /// <param name="loggerFactory"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
