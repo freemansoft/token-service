@@ -5,9 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyName>TokenService.CoreTest</AssemblyName>
-
-    <RootNamespace>CoreTest</RootNamespace>
+    <AssemblyName>TokenService.AWSTest</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,10 +16,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AWS\AWS.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Models\Model.csproj" />
   </ItemGroup>
