@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AWS
+﻿namespace AWS
 {
     public class TableUtil
     {

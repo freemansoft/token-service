@@ -2,12 +2,11 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using TokenService.Controllers;
-using TokenService.Model.Dto;
-using TokenService.Core.Repository;
 using TokenService.Core.Service;
+using TokenService.InMemory.Repository;
+using TokenService.Model.Dto;
 using Xunit;
 using Xunit.Abstractions;
-using TokenService.InMemory.Repository;
 
 namespace TokenServiceTest.Controllers
 {

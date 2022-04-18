@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using TokenService.Core.Exception;
-using TokenService.Model.Entity;
-using TokenService.Model.Dto;
 using TokenService.Core.Repository;
+using TokenService.Model.Dto;
+using TokenService.Model.Entity;
 
 namespace TokenService.RTepository.Repository
 {

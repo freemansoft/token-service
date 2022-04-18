@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TokenService.Core.Exception;
-using TokenService.Model.Dto;
 using TokenService.Core.Service;
+using TokenService.Model.Dto;
 
 namespace TokenService.Controllers
 {
@@ -47,7 +47,7 @@ namespace TokenService.Controllers
         [ProducesResponseType(typeof(ConsistencyException), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(BadArgumentException), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ConfigurationException), StatusCodes.Status500InternalServerError)]
-        public IActionResult Create([FromBody]TokenCreateRequest value)
+        public IActionResult Create([FromBody] TokenCreateRequest value)
         {
             TokenCreateResponse response = _creationService.CreateToken(value);
             return Created("../Validate", response);
@@ -71,7 +71,7 @@ namespace TokenService.Controllers
         [ProducesResponseType(typeof(NotFoundException), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ViolationException), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ConfigurationException), StatusCodes.Status500InternalServerError)]
-        public IActionResult Validate([FromBody]TokenValidateRequest value)
+        public IActionResult Validate([FromBody] TokenValidateRequest value)
         {
             TokenValidateResponse response = _validationService.ValidateToken(value);
             return Ok(response);

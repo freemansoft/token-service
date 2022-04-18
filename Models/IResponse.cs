@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TokenService.Model
+﻿namespace TokenService.Model
 {
     /// <summary>
     /// Standard response for service calls. Can also be wrapped inside custom exceptions

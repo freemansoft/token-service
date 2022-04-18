@@ -1,3 +1,4 @@
+# This file is OBSOLETE and should be replaced by multi-stage bilds
 version: '3.4'
 
 services:

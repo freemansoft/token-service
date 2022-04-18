@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
+using System;
 using System.IO;
 using TokenService.Core.Repository;
-using TokenService.Model.Entity;
-using TokenService.InMemory;
 using TokenService.Core.Service;
 using TokenService.InMemory.Repository;
+using TokenService.Model.Entity;
 
 namespace TokenService
 {
@@ -26,7 +25,7 @@ namespace TokenService
         /// Standard boilerplate that loads the application settings / configuration
         /// </summary>
         /// <param name="env"></param>
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -49,7 +48,22 @@ namespace TokenService
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CryptographySettings>(Configuration.GetSection("CryptographySettings"));
-            services.AddLogging();
+
+            // appsettings.json: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?tabs=aspnetcore2x
+            // appsettings.json was defaults Level "Warning" by template.  Changed to Level to "Information"
+            // Sends to Debug window at Information or higher. Overriding because we want Debug window at Debug if available 
+            // Debug output only visible when running with IIS Express because 
+            // ASPNETCORE_ENVIRONMENT:Development mode only set for iis profile in launchsettings.json
+            // launchsettings.json https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments
+
+
+            // https://stackoverflow.com/questions/53840298/how-to-fix-obsolete-iloggerfactory-methods
+            services.AddLogging(loggingBuilder =>
+           {
+               loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
+               loggingBuilder.AddConsole();
+               loggingBuilder.AddDebug();
+           });
 
             // DI container - AddTransient(), AddScoped(), AddSingleton()
             // persistance
@@ -66,12 +80,12 @@ namespace TokenService
             // from https://docs.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?tabs=visual-studio
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Token Service API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Token Service API", Version = "v1" });
 
                 // Configure swagger to pull REST controller method comments.
                 // Set the comments path for the Swagger JSON and UI. Relies on the generation of XML documentation
                 // XML documentation must be enabled with this file name in the TokenService properties 
-                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                var basePath = AppContext.BaseDirectory;
                 var xmlPath = Path.Combine(basePath, "TokenService.xml");
                 c.IncludeXmlComments(xmlPath);
             });
@@ -86,18 +100,8 @@ namespace TokenService
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param> https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments
-        /// <param name="loggerFactory"></param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // appsettings.json: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?tabs=aspnetcore2x
-            // appsettings.json was defaults Level "Warning" by template.  Changed to Level to "Information"
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            // Sends to Debug window at Information or higher. Overriding because we want Debug window at Debug if available 
-            // Debug output only visible when running with IIS Express because 
-            // ASPNETCORE_ENVIRONMENT:Development mode only set for iis profile in launchsettings.json
-            // launchsettings.json https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments
-            loggerFactory.AddDebug(LogLevel.Debug);
-
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -107,7 +111,23 @@ namespace TokenService
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            app.UseMvc();
+            // https://devblogs.microsoft.com/dotnet/asp-net-core-updates-in-net-core-3-0-preview-4/
+            app.UseStaticFiles();
+            // Runs matching. An endpoint is selected and set on the HttpContext if a match is found.
+            app.UseRouting();
+
+            // Middleware that run after routing occurs. Usually the following appear here:
+            //app.UseAuthentication();
+            //app.UseAuthorization();
+            //app.UseCors();
+
+            // Executes the endpoint that was selected by routing.
+            app.UseEndpoints(endpoints =>
+            {
+                // Mapping of endpoints goes here:
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
         }
     }
 }

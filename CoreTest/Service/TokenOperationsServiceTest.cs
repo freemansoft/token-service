@@ -1,15 +1,15 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using TokenService.Core.Exception;
-using TokenService.Model.Dto;
-using TokenService.Model.Entity;
 using TokenService.Core.Repository;
 using TokenService.Core.Service;
+using TokenService.Model.Dto;
+using TokenService.Model.Entity;
 using Xunit;
 using Xunit.Abstractions;
-using System.Collections.Generic;
 
 namespace CoreTest.Service
 {
@@ -36,7 +36,7 @@ namespace CoreTest.Service
 
             // oh moma I live in fear of my life from from the long arm of Moq 
             Mock<IRepository<TokenEntity>> someMock = new Mock<IRepository<TokenEntity>>();
-            Dictionary<string, TokenEntity> dict = new Dictionary<string,TokenEntity>();
+            Dictionary<string, TokenEntity> dict = new Dictionary<string, TokenEntity>();
             someMock.Setup(x => x.Create(It.IsAny<TokenEntity>()))
                 .Callback((TokenEntity t) =>
                 {
@@ -46,7 +46,7 @@ namespace CoreTest.Service
                 .Callback((TokenEntity t) =>
                 {
                     dict.Remove(t.Id);
-                    dict.Add(t.Id,t);
+                    dict.Add(t.Id, t);
                 });
             someMock.Setup(x => x.GetById(It.IsAny<string>()))
                 .Returns((string key) =>

@@ -8,9 +8,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.RegularExpressions;
 using TokenService.Core.Exception;
+using TokenService.Core.Repository;
 using TokenService.Model.Dto;
 using TokenService.Model.Entity;
-using TokenService.Core.Repository;
 
 namespace TokenService.Core.Service
 {

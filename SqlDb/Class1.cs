@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TokenService.SqlDb
+﻿namespace TokenService.SqlDb
 {
     public class Class1
     {

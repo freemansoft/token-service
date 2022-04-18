@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using TokenService.Core.Exception;
+using TokenService.InMemory.Repository;
 using TokenService.Model.Entity;
-using TokenService.Core.Repository;
 using Xunit;
 using Xunit.Abstractions;
-using TokenService.InMemory.Repository;
 
 namespace InMemoryTest.Repository
 {
@@ -159,7 +158,7 @@ namespace InMemoryTest.Repository
         [Fact]
         public void UpdateNullEntity()
         {
-           try
+            try
             {
                 ut.Update(null);
                 Assert.False(true);
